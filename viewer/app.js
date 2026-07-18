@@ -18,6 +18,8 @@ const state = {
   scale: 'fit'
 };
 
+const previewCacheBust = Date.now();
+
 const elements = {
   catalog: document.querySelector('#catalog'),
   comparison: document.querySelector('#comparison'),
@@ -109,7 +111,7 @@ function updatePanel(side) {
   const title = panel.querySelector('.preview-identity strong');
   const detail = panel.querySelector('.preview-identity small');
   const iframe = panel.querySelector('iframe');
-  const nextUrl = itemUrl(item);
+  const nextUrl = itemUrl(item, previewCacheBust);
 
   chip.textContent = item.provider;
   chip.className = `provider-chip ${providerClass(item.provider)}`;

@@ -5,6 +5,33 @@
   const focusMessage = 'beetbox:audio-focus';
   const suspendMessage = 'beetbox:audio-suspend';
   const focusId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
+
+  // Safari can leave a user-started AudioContext silent when it belongs to an
+  // embedded document, even though the same page works at the top level. On
+  // same-origin arena builds, create the implementation's contexts in the top
+  // document instead. Do not install the muting shim in this mode: reliable
+  // playback is more important than automatic focus on Apple WebKit.
+  const isAppleWebKit = navigator.vendor === 'Apple Computer, Inc.' && /AppleWebKit/i.test(navigator.userAgent);
+  if (isAppleWebKit && window.top !== window) {
+    try {
+      if (window.top.location.origin === window.location.origin) {
+        const TopAudioContext = window.top.AudioContext || window.top.webkitAudioContext;
+        if (TopAudioContext) {
+          function TopLevelAudioContext(...args) {
+            return Reflect.construct(TopAudioContext, args);
+          }
+          TopLevelAudioContext.prototype = TopAudioContext.prototype;
+          Object.setPrototypeOf(TopLevelAudioContext, TopAudioContext);
+          window.AudioContext = TopLevelAudioContext;
+          window.webkitAudioContext = TopLevelAudioContext;
+          return;
+        }
+      }
+    } catch {
+      // Local previews use different ports and fall through to message-based focus.
+    }
+  }
+
   const contexts = new Set();
   const focusGains = new Map();
 

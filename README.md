@@ -20,7 +20,7 @@ The arena preserves the resulting implementations and makes it possible to compa
 
 [Open Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/)
 
-Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. Audio focus follows the most recently used preview, automatically muting audio from the other panel.
+Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. The arena automatically mutes the other panel where iframe audio focus is reliable; Safari favors reliable playback over automatic muting.
 
 ## Run locally
 
