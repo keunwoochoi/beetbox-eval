@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>Beetbox Model Arena</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Beetbox Model Arena home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span><strong>BEETBOX</strong><small>MODEL ARENA</small></span>
+        </a>
+        <div class="topbar-note"><span class="live-dot"></span><span id="ready-count">Starting previews…</span></div>
+        <div class="topbar-actions">
+          <button class="quiet-button" id="show-help" type="button">How to compare</button>
+          <a class="quiet-button" href="reference.html" target="_blank" rel="noreferrer">Reference ↗</a>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <div class="sidebar-heading">
+          <div><span class="eyebrow">RUN CATALOG</span><strong>Implementations</strong></div>
+          <span class="count-pill" id="run-count">0</span>
+        </div>
+        <div class="filters" role="group" aria-label="Filter runs">
+          <button class="filter active" data-filter="pinned" type="button">Pinned</button>
+          <button class="filter" data-filter="OpenAI" type="button">GPT</button>
+          <button class="filter" data-filter="Anthropic" type="button">Claude</button>
+          <button class="filter" data-filter="MiniMax" type="button">MiniMax</button>
+          <button class="filter" data-filter="all" type="button">All</button>
+        </div>
+        <div class="catalog" id="catalog" aria-live="polite"></div>
+        <div class="sidebar-foot">
+          <span class="status-key"><i class="ready"></i>Ready</span>
+          <span class="status-key"><i class="starting"></i>Starting</span>
+          <p>Audio begins after you interact with a preview. Pause one sequencer before playing another.</p>
+          <p class="project-note"><strong>Independent reconstruction study.</strong> Inspired by the Beetbox showcase in the <a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noreferrer">Kimi K3 release blog ↗</a>. Not affiliated with Kimi or Moonshot AI.</p>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <section class="controls" aria-label="Comparison controls">
+          <div class="mode-switch" role="group" aria-label="View mode">
+            <button data-mode="solo" type="button">Solo</button>
+            <button class="active" data-mode="split" type="button">Split</button>
+          </div>
+          <label class="select-control"><span>A</span><select id="select-a" aria-label="Choose left preview"></select></label>
+          <button class="icon-button" id="swap" type="button" title="Swap previews" aria-label="Swap previews">⇄</button>
+          <label class="select-control second"><span>B</span><select id="select-b" aria-label="Choose right preview"></select></label>
+          <div class="scale-switch" role="group" aria-label="Preview scale">
+            <button class="active" data-scale="fit" type="button">Fit</button>
+            <button data-scale="native" type="button">Responsive</button>
+          </div>
+        </section>
+
+        <section class="comparison split" id="comparison">
+          <article class="preview-panel" data-side="a">
+            <header class="preview-header">
+              <div class="preview-identity"><span class="provider-chip">Source</span><div><strong>Reference video</strong><small>Original Beetbox capture</small></div></div>
+              <div class="preview-actions"><button class="reload" type="button">Reload</button><button class="open" type="button">Open ↗</button></div>
+            </header>
+            <div class="viewport"><div class="canvas"><iframe title="Preview A" loading="eager"></iframe></div><div class="loading-card"><span></span>Preview is starting</div></div>
+          </article>
+          <article class="preview-panel" data-side="b">
+            <header class="preview-header">
+              <div class="preview-identity"><span class="provider-chip">OpenAI</span><div><strong>GPT-5.6 Sol</strong><small>Codex CLI · xhigh</small></div></div>
+              <div class="preview-actions"><button class="reload" type="button">Reload</button><button class="open" type="button">Open ↗</button></div>
+            </header>
+            <div class="viewport"><div class="canvas"><iframe title="Preview B" loading="eager"></iframe></div><div class="loading-card"><span></span>Preview is starting</div></div>
+          </article>
+        </section>
+
+        <footer class="workspace-foot"><span><kbd>↑</kbd><kbd>↓</kbd> browse runs</span><span>All previews use the original 1454×1622 canvas in Fit mode.</span></footer>
+      </main>
+    </div>
+
+    <dialog id="help-dialog">
+      <button class="dialog-close" type="button" aria-label="Close">×</button>
+      <span class="eyebrow">QUICK GUIDE</span>
+      <h2>Compare behavior, not just screenshots.</h2>
+      <ol>
+        <li>Keep the reference on side A and choose implementations for side B.</li>
+        <li>Use <strong>Fit</strong> for consistent visual scale or <strong>Responsive</strong> for full interaction.</li>
+        <li>Try transport, presets, sequencer cells, mute controls, keyboard notes, and loop recording.</li>
+        <li>Open promising runs in a separate tab for uninterrupted audio testing.</li>
+      </ol>
+      <p>The two legacy baselines are labeled unpinned because they were produced by generic subagents rather than their named provider CLIs.</p>
+    </dialog>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

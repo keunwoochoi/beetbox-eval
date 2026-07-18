@@ -1,0 +1,12 @@
+{
+  "name": "beetbox-model-arena",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.61.1",
+    "vite": "^7.0.0"
+  }
+}

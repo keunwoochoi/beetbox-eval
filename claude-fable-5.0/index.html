@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101010" />
+    <title>Beetbox — beat sequencing</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="console" aria-label="Beetbox beat sequencer">
+      <div class="desk">
+        <header class="masthead">
+          <div id="pixel-logo" class="pixel-logo" aria-label="BEETBOX"></div>
+          <h1>Beat sequencing · channel desk.</h1>
+        </header>
+
+        <section class="transport">
+          <button id="play" class="play button" aria-label="Play sequence"><span class="transport-icon">▶</span><span id="play-label">PLAY</span></button>
+          <label class="slider-box">
+            <span class="slider-caption">TEMPO</span><output id="tempo-output">132</output>
+            <input id="tempo" type="range" min="60" max="180" value="132" />
+          </label>
+          <label class="slider-box swing-box">
+            <span class="slider-caption">SWING</span><output id="swing-output">0%</output>
+            <input id="swing" type="range" min="0" max="60" value="0" />
+          </label>
+          <label class="slider-box volume-box">
+            <span class="slider-caption">VOLUME</span><output id="volume-output">90</output>
+            <input id="volume" type="range" min="0" max="100" value="90" />
+          </label>
+          <div id="on-air" class="on-air"><i></i><span>ON AIR</span></div>
+        </section>
+
+        <nav id="presets" class="presets" aria-label="Channel presets"></nav>
+        <div class="pattern-tools">
+          <button id="clear" class="button quiet">CLEAR</button>
+          <button id="random" class="button quiet">RANDOM</button>
+        </div>
+
+        <section id="visualizer" class="visualizer" aria-label="Animated ASCII sound landscape"></section>
+
+        <section class="sequencer" aria-label="Step sequencer">
+          <div class="step-head">
+            <div class="track-hint">TRACK click = mute ⇩</div>
+            <div id="step-numbers" class="step-numbers"></div>
+          </div>
+          <div id="tracks" class="tracks"></div>
+        </section>
+
+        <section class="performance">
+          <div class="mode-strip">
+            <button id="loop" class="button loop"><i></i>LOOP REC</button>
+            <button class="button mode active" data-mode="lead">LEAD</button>
+            <button class="button mode" data-mode="bass">BASS</button>
+          </div>
+          <div id="keybed" class="keybed"></div>
+        </section>
+
+        <footer class="instructions">
+          <p><b>Click cells</b> to write beats · tap <b>LEAD / BASS</b> to cycle pitch (right-click lowers) · click a track name to mute</p>
+          <p><b>Space</b> play/stop</p>
+        </footer>
+      </div>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

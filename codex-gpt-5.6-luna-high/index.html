@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111111" />
+    <title>BEETBOX — Beat sequencing · channel desk.</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="beetbox" aria-label="Beetbox beat sequencer">
+      <div class="corner-tools" aria-label="App tools">
+        <button class="tool-button" id="fullscreenButton" aria-label="Toggle fullscreen">↙↗</button>
+        <button class="tool-button more-button" aria-label="More options">•••</button>
+      </div>
+
+      <header class="brand-row">
+        <div class="pixel-logo" aria-label="Beetbox"></div>
+        <h1>Beat sequencing · channel desk.</h1>
+      </header>
+
+      <section class="transport" aria-label="Transport controls">
+        <button id="playButton" class="play-button"><span class="play-icon">▶</span><span id="playLabel">PLAY</span></button>
+        <label class="mixer-control">
+          <span class="control-label">TEMPO <output id="tempoValue">132</output></span>
+          <input id="tempo" type="range" min="80" max="180" value="132" />
+        </label>
+        <label class="mixer-control">
+          <span class="control-label">SWING <output id="swingValue">0%</output></span>
+          <input id="swing" type="range" min="0" max="60" value="0" />
+        </label>
+        <label class="mixer-control">
+          <span class="control-label">VOLUME <output id="volumeValue">90</output></span>
+          <input id="volume" type="range" min="0" max="100" value="90" />
+        </label>
+        <div class="on-air"><i id="airLight"></i>ON AIR</div>
+      </section>
+
+      <nav class="channels" aria-label="Channels">
+        <button class="channel active" data-channel="0"><i></i>CH·10 <strong>DARKROOM</strong></button>
+        <button class="channel" data-channel="1"><i></i>CH·20 <strong>GREASE</strong></button>
+        <button class="channel" data-channel="2"><i></i>CH·30 <strong>BACKSTREET</strong></button>
+        <button class="channel" data-channel="3"><i></i>CH·40 <strong>DAYLIGHT</strong></button>
+        <button class="channel" data-channel="4"><i></i>CH·50 <strong>ACID</strong></button>
+      </nav>
+
+      <div class="pattern-actions">
+        <button id="clearButton">CLEAR</button>
+        <button id="randomButton">RANDOM</button>
+      </div>
+
+      <section class="glyph-field" id="glyphField" aria-label="Generative pattern display"></section>
+
+      <section class="sequencer" aria-label="Step sequencer">
+        <div class="track-heading">TRACK <span>click = mute ↕</span></div>
+        <div class="step-numbers" id="stepNumbers"></div>
+        <div class="track-list" id="trackList"></div>
+        <div class="step-grid" id="stepGrid"></div>
+      </section>
+
+      <section class="performance" aria-label="Performance controls">
+        <div class="mode-row">
+          <button id="loopButton" class="loop-button"><i></i>LOOP REC</button>
+          <button id="leadButton" class="mode active">LEAD</button>
+          <button id="bassButton" class="mode">BASS</button>
+        </div>
+        <div class="key-row" id="keyRow"></div>
+      </section>
+
+      <footer class="help">
+        <p>Click cells to write beats · tap <b>LEAD</b> / <b>BASS</b> to cycle pitch (right-click lowers) · click a track name to mute</p>
+        <p><b>Space</b> play/stop</p>
+      </footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

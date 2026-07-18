@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beetbox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topline">
+        <div class="brand">BEETBOX</div><span class="tagline">Beat sequencing · channel desk.</span>
+        <div class="head-actions"><button title="shuffle" id="header-random">↗</button><button title="menu">•••</button></div>
+      </header>
+
+      <section class="transport">
+        <button id="play" class="play"><span class="triangle">▶</span><span>PLAY</span></button>
+        <label class="slider-block">TEMPO <b id="tempo-value">132</b><input id="tempo" type="range" min="72" max="180" value="132"></label>
+        <label class="slider-block">SWING <b id="swing-value">0%</b><input id="swing" type="range" min="0" max="50" value="0"></label>
+        <label class="slider-block">VOLUME <b id="volume-value">90</b><input id="volume" type="range" min="0" max="100" value="90"></label>
+        <div class="onair"><i></i> ON AIR</div>
+      </section>
+
+      <nav class="channels" id="channels"></nav>
+      <div class="utility"><button id="clear">CLEAR</button><button id="random">RANDOM</button></div>
+
+      <section class="visualizer" id="visualizer" aria-label="audio visualizer"></section>
+
+      <section class="sequencer">
+        <div class="tracks-header">TRACK <span>click = mute ↕</span></div>
+        <div class="step-labels" id="step-labels"></div>
+        <div class="track-names" id="track-names"></div>
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <section class="mode-row"><button id="loop"><i></i> LOOP REC</button><button class="mode active" data-mode="lead">LEAD</button><button class="mode" data-mode="bass">BASS</button></section>
+      <section class="keys" id="keys"></section>
+      <p class="help">Click cells to write beats · tap <strong>LEAD / BASS</strong> to cycle pitch (right-click lowers) · click a<br class="wide-break"> track name to mute</p>
+      <p class="space"><strong>Space</strong> play/stop</p>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

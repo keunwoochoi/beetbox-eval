@@ -1,0 +1,9 @@
+{
+  "name": "beetbox-eval",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npm --prefix viewer start",
+    "export-pages": "node scripts/export-pages.mjs"
+  }
+}

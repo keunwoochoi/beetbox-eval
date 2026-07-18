@@ -1,0 +1,14 @@
+.DS_Store
+.eval-failed/
+.eval-logs/
+_site/
+**/.vite/
+**/dist/
+**/node_modules/
+
+# Every evaluation run began with the same reference media. Keep one canonical copy.
+*/beetbox.mov
+*/beetbox_frames/
+!prompt/beetbox.mov
+!prompt/beetbox_frames/
+!prompt/beetbox_frames/**

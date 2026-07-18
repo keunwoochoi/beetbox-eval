@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEETBOX — Beat sequencing · channel desk.</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <header class="app-header">
+    <canvas id="logo" class="logo" width="360" height="60" aria-label="BEETBOX"></canvas>
+    <h1 class="visually-hidden">Beetbox</h1>
+    <p class="subtitle">Beat sequencing <span class="dot">·</span> channel desk.</p>
+  </header>
+
+  <section class="transport">
+    <button id="playBtn" class="play-btn" type="button">
+      <span class="play-icon" aria-hidden="true"></span>
+      <span class="play-label">PLAY</span>
+    </button>
+
+    <div class="control">
+      <div class="control-head">
+        <span class="control-name">TEMPO</span>
+        <span class="control-val" id="tempoVal">132</span>
+      </div>
+      <input type="range" id="tempoSlider" min="60" max="200" step="1" value="132">
+    </div>
+
+    <div class="control">
+      <div class="control-head">
+        <span class="control-name">SWING</span>
+        <span class="control-val" id="swingVal">0%</span>
+      </div>
+      <input type="range" id="swingSlider" min="0" max="60" step="1" value="0">
+    </div>
+
+    <div class="control">
+      <div class="control-head">
+        <span class="control-name">VOLUME</span>
+        <span class="control-val" id="volumeVal">90</span>
+      </div>
+      <input type="range" id="volumeSlider" min="0" max="100" step="1" value="90">
+    </div>
+
+    <div class="onair" id="onair">
+      <span class="onair-dot" aria-hidden="true"></span>
+      <span>ON AIR</span>
+    </div>
+  </section>
+
+  <nav class="presets" id="presets">
+    <button class="preset-btn" data-preset="darkroom" type="button"><span class="preset-dot" aria-hidden="true"></span>CH&middot;10 DARKROOM</button>
+    <button class="preset-btn" data-preset="grease" type="button">CH&middot;20 GREASE</button>
+    <button class="preset-btn" data-preset="backstreet" type="button">CH&middot;30 BACKSTREET</button>
+    <button class="preset-btn" data-preset="daylight" type="button">CH&middot;40 DAYLIGHT</button>
+    <button class="preset-btn" data-preset="acid" type="button">CH&middot;50 ACID</button>
+  </nav>
+
+  <div class="utility-row">
+    <button id="clearBtn" class="util-btn" type="button">CLEAR</button>
+    <button id="randomBtn" class="util-btn" type="button">RANDOM</button>
+  </div>
+
+  <div class="ascii-wrap">
+    <canvas id="ascii" class="ascii"></canvas>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="track-hint">TRACK <span class="dim">click = mute</span> <span class="arrow" aria-hidden="true">&#8659;</span></div>
+
+    <div class="seq-grid" id="seqGrid">
+      <!-- built by JS -->
+    </div>
+  </div>
+
+  <div class="rec-row">
+    <button id="loopRecBtn" class="util-btn rec-btn" type="button">
+      <span class="rec-dot" aria-hidden="true"></span>LOOP REC
+    </button>
+    <div class="lb-tabs" id="lbTabs">
+      <button class="lb-tab active" data-track="lead" type="button">LEAD</button>
+      <button class="lb-tab" data-track="bass" type="button">BASS</button>
+    </div>
+  </div>
+
+  <div class="pitch-row" id="pitchRow">
+    <!-- built by JS -->
+  </div>
+
+  <p class="help">
+    <strong>Click cells</strong> to write beats &middot; tap <strong>LEAD / BASS</strong> to cycle pitch (right-click lowers) &middot; <strong>click a track name</strong> to mute
+  </p>
+  <p class="help"><strong>Space</strong> play/stop</p>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

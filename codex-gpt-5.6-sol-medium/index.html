@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beetbox — beat sequencing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <div class="desk">
+      <header class="masthead">
+        <div id="logo" class="logo" aria-label="BEETBOX"></div>
+        <h1>Beat sequencing · channel desk.</h1>
+        <div class="utilities">
+          <button id="expand" class="icon-button" aria-label="Toggle full screen">↗</button>
+          <button id="menu" class="icon-button" aria-label="Toggle information">•••</button>
+        </div>
+      </header>
+
+      <section class="transport" aria-label="Transport and mixer">
+        <button id="play" class="play-button"><span class="play-icon">▶</span><span class="play-label">PLAY</span></button>
+        <label class="fader"><span>TEMPO</span><output id="tempoValue">132</output><input id="tempo" type="range" min="72" max="188" value="132" /></label>
+        <label class="fader"><span>SWING</span><output id="swingValue">0%</output><input id="swing" type="range" min="0" max="60" value="0" /></label>
+        <label class="fader volume"><span>VOLUME</span><output id="volumeValue">90</output><input id="volume" type="range" min="0" max="100" value="90" /></label>
+        <div class="air"><i></i><span>ON AIR</span></div>
+      </section>
+
+      <nav class="channels" aria-label="Pattern channels"></nav>
+      <div class="actions"><button id="clear">CLEAR</button><button id="random">RANDOM</button></div>
+
+      <section class="visualizer" aria-label="Animated sound visualization"><div id="ascii"></div></section>
+
+      <section class="sequencer">
+        <div class="grid-label">TRACK click = mute ↓</div>
+        <div id="steps" class="steps" role="grid" aria-label="16 step sequencer"></div>
+      </section>
+
+      <div class="modebar">
+        <button id="record"><i></i>LOOP REC</button>
+        <button class="mode active" data-mode="lead">LEAD</button>
+        <button class="mode" data-mode="bass">BASS</button>
+      </div>
+
+      <div id="keys" class="keys" aria-label="Pitch controls"></div>
+
+      <footer>
+        <p>Click <b>cells</b> to write beats · tap <b>LEAD / BASS</b> to cycle pitch (right-click lowers) · click a track name to mute</p>
+        <p><b>Space</b> play/stop</p>
+      </footer>
+    </div>
+    <aside id="info" class="info" hidden>
+      <button id="closeInfo" aria-label="Close">×</button>
+      <p>BEETBOX is a tiny sixteen-step channel desk.</p>
+      <p>Choose a channel, shape the beat, and press play.</p>
+    </aside>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

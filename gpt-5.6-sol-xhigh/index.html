@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101112" />
+    <title>BEETBOX — channel desk</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="desk">
+      <div class="console">
+        <header class="brand-row">
+          <div id="pixelLogo" class="pixel-logo" role="img" aria-label="BEETBOX"></div>
+          <h1>Beat sequencing · channel desk.</h1>
+        </header>
+
+        <section class="transport" aria-label="Transport controls">
+          <button id="playButton" class="transport-button" type="button"><span class="play-icon">▶</span><span class="stop-icon">■</span><span class="transport-copy">PLAY</span></button>
+          <label class="slider-panel" for="tempo">
+            <span class="slider-name">TEMPO</span><output id="tempoValue">132</output>
+            <input id="tempo" type="range" min="72" max="180" value="132" />
+          </label>
+          <label class="slider-panel" for="swing">
+            <span class="slider-name">SWING</span><output id="swingValue">0%</output>
+            <input id="swing" type="range" min="0" max="60" value="0" />
+          </label>
+          <label class="slider-panel" for="volume">
+            <span class="slider-name">VOLUME</span><output id="volumeValue">90</output>
+            <input id="volume" type="range" min="0" max="100" value="90" />
+          </label>
+          <div id="onAir" class="on-air"><i></i>ON AIR</div>
+        </section>
+
+        <nav id="stationTabs" class="station-tabs" aria-label="Pattern channels"></nav>
+        <div class="pattern-actions">
+          <button id="clearButton" type="button">CLEAR</button>
+          <button id="randomButton" type="button">RANDOM</button>
+        </div>
+
+        <section class="scope" aria-label="Animated audio visualization">
+          <canvas id="scopeCanvas"></canvas>
+        </section>
+
+        <section class="sequencer" aria-label="16 step sequencer">
+          <div id="stepGrid" class="step-grid"></div>
+        </section>
+
+        <section class="record-strip" aria-label="Recording and instrument selection">
+          <button id="recordButton" class="record-button" type="button"><i></i> LOOP REC</button>
+          <div id="instrumentButtons" class="instrument-buttons">
+            <button type="button" data-mode="lead" class="active">LEAD</button>
+            <button type="button" data-mode="bass">BASS</button>
+          </div>
+        </section>
+
+        <section id="notePads" class="note-pads" aria-label="Note keyboard"></section>
+
+        <footer class="help">
+          <p><strong>Click cells</strong> to write beats · tap <strong>LEAD / BASS</strong> to cycle pitch (right-click lowers) · <strong>click a track name</strong> to mute</p>
+          <p><strong>Space</strong> play/stop</p>
+        </footer>
+      </div>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

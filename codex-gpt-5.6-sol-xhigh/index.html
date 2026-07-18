@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0e0e0e" />
+    <title>BEETBOX — Beat sequencing · channel desk.</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="beetbox">
+      <div class="deck">
+        <header class="masthead">
+          <div class="dot-logo" aria-label="BEETBOX"></div>
+          <h1>Beat sequencing · channel desk.</h1>
+        </header>
+
+        <section class="transport" aria-label="Transport controls">
+          <button class="transport-button" id="transportButton" type="button">
+            <span class="transport-icon" aria-hidden="true"></span>
+            <span class="transport-label">PLAY</span>
+          </button>
+
+          <label class="slider-control">
+            <span class="slider-line"><span>TEMPO</span><output id="tempoOutput">132</output></span>
+            <input id="tempo" type="range" min="72" max="180" value="132" />
+          </label>
+
+          <label class="slider-control">
+            <span class="slider-line"><span>SWING</span><output id="swingOutput">0%</output></span>
+            <input id="swing" type="range" min="0" max="40" value="0" />
+          </label>
+
+          <label class="slider-control">
+            <span class="slider-line"><span>VOLUME</span><output id="volumeOutput">90</output></span>
+            <input id="volume" type="range" min="0" max="100" value="90" />
+          </label>
+
+          <div class="on-air"><i></i><span>ON AIR</span></div>
+        </section>
+
+        <nav class="channels" id="channels" aria-label="Pattern presets"></nav>
+
+        <div class="utilities">
+          <button id="clearButton" type="button">CLEAR</button>
+          <button id="randomButton" type="button">RANDOM</button>
+        </div>
+
+        <div class="visualizer" id="visualizer" aria-label="Music visualizer" aria-hidden="true"></div>
+
+        <section class="sequencer" aria-label="16 step beat sequencer">
+          <div class="sequencer-head">
+            <div class="track-title">TRACK <span>click = mute ↓</span></div>
+            <div class="step-numbers" id="stepNumbers"></div>
+          </div>
+          <div class="track-list" id="trackList"></div>
+        </section>
+
+        <section class="mode-row" aria-label="Recording and pitch controls">
+          <button class="record-button" id="recordButton" type="button"><i></i>LOOP REC</button>
+          <button class="mode-button selected" data-mode="lead" type="button">LEAD</button>
+          <button class="mode-button" data-mode="bass" type="button">BASS</button>
+        </section>
+
+        <section class="keyboard" id="keyboard" aria-label="Playable notes"></section>
+
+        <div class="instructions">
+          <p><b>Click cells</b> to write beats · tap <b>LEAD / BASS</b> to cycle pitch (right-click lowers) · <b>click a track name</b> to mute</p>
+          <p><b>Space</b> play/stop</p>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
