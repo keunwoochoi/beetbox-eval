@@ -6,32 +6,39 @@
   const suspendMessage = 'beetbox:audio-suspend';
   const contexts = new Set();
 
-  for (const name of ['AudioContext', 'webkitAudioContext']) {
-    const NativeAudioContext = window[name];
-    if (!NativeAudioContext) continue;
+  function rememberContext(context) {
+    if (!context || contexts.has(context)) return;
+    contexts.add(context);
+    context.addEventListener?.('statechange', () => {
+      if (context.state === 'closed') contexts.delete(context);
+    });
+  }
 
-    function ArenaAudioContext(...args) {
-      const context = new NativeAudioContext(...args);
-      contexts.add(context);
-      context.addEventListener?.('statechange', () => {
-        if (context.state === 'closed') contexts.delete(context);
-      });
-      return context;
-    }
-
-    ArenaAudioContext.prototype = NativeAudioContext.prototype;
-    Object.setPrototypeOf(ArenaAudioContext, NativeAudioContext);
-    window[name] = ArenaAudioContext;
+  // Discover contexts when their native audio graphs are connected instead of
+  // replacing AudioContext itself. Safari is particularly sensitive to Web
+  // Audio constructor shims, while every audible graph eventually connects an
+  // AudioNode to another node or to the destination.
+  const audioNodePrototype = window.AudioNode?.prototype;
+  const nativeConnect = audioNodePrototype?.connect;
+  if (nativeConnect) {
+    audioNodePrototype.connect = function connect(...args) {
+      rememberContext(this.context);
+      rememberContext(args[0]?.context);
+      return nativeConnect.apply(this, args);
+    };
   }
 
   function claimAudioFocus() {
-    window.parent.postMessage({ type: focusMessage }, '*');
     for (const context of contexts) {
       if (!['running', 'closed'].includes(context.state)) context.resume().catch(() => {});
     }
+    window.parent.postMessage({ type: focusMessage }, '*');
   }
 
   window.addEventListener('pointerdown', claimAudioFocus, true);
+  window.addEventListener('pointerup', claimAudioFocus, true);
+  window.addEventListener('touchend', claimAudioFocus, true);
+  window.addEventListener('click', claimAudioFocus, true);
   window.addEventListener('keydown', claimAudioFocus, true);
   window.addEventListener('message', (event) => {
     if (event.source !== window.parent || event.data?.type !== suspendMessage) return;
