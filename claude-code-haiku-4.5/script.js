@@ -179,6 +179,7 @@ function togglePlayback() {
   playBtn.classList.toggle('playing', state.isPlaying);
 
   if (state.isPlaying) {
+    ensureAudio();
     startPlayback();
   }
 }
@@ -327,10 +328,20 @@ function handleKeypress(e) {
   }
 }
 
+let audioContext = null;
+
+function ensureAudio() {
+  if (!audioContext || audioContext.state === 'closed') {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state !== 'running') audioContext.resume().catch(() => {});
+  return audioContext;
+}
+
 function playSound(trackId) {
   // Create simple beep using Web Audio API
   try {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = ensureAudio();
     const now = audioContext.currentTime;
 
     // Different frequencies for different tracks

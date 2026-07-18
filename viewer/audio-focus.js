@@ -5,25 +5,38 @@
   const focusMessage = 'beetbox:audio-focus';
   const suspendMessage = 'beetbox:audio-suspend';
   const contexts = new Set();
+  const focusGains = new Map();
+
+  const audioNodePrototype = window.AudioNode?.prototype;
+  const nativeConnect = audioNodePrototype?.connect;
+
+  function focusGainFor(context) {
+    if (!context || !nativeConnect) return null;
+    if (focusGains.has(context)) return focusGains.get(context);
+    const gain = context.createGain();
+    gain.gain.value = 1;
+    nativeConnect.call(gain, context.destination);
+    focusGains.set(context, gain);
+    return gain;
+  }
 
   function rememberContext(context) {
     if (!context || contexts.has(context)) return;
     contexts.add(context);
     context.addEventListener?.('statechange', () => {
-      if (context.state === 'closed') contexts.delete(context);
+      if (context.state !== 'closed') return;
+      contexts.delete(context);
+      focusGains.delete(context);
     });
   }
 
-  // Discover contexts when their native audio graphs are connected instead of
-  // replacing AudioContext itself. Safari is particularly sensitive to Web
-  // Audio constructor shims, while every audible graph eventually connects an
-  // AudioNode to another node or to the destination.
-  const audioNodePrototype = window.AudioNode?.prototype;
-  const nativeConnect = audioNodePrototype?.connect;
+  // Route each graph through a unity-gain focus control. Muting this node keeps
+  // AudioContext running and avoids Safari's unreliable suspend/resume cycle.
   if (nativeConnect) {
     audioNodePrototype.connect = function connect(...args) {
-      rememberContext(this.context);
-      rememberContext(args[0]?.context);
+      const context = this.context || args[0]?.context;
+      rememberContext(context);
+      if (context && args[0] === context.destination) args[0] = focusGainFor(context);
       return nativeConnect.apply(this, args);
     };
   }
@@ -31,6 +44,8 @@
   function claimAudioFocus() {
     for (const context of contexts) {
       if (!['running', 'closed'].includes(context.state)) context.resume().catch(() => {});
+      const gain = focusGains.get(context);
+      if (gain) gain.gain.setTargetAtTime(1, context.currentTime, 0.005);
     }
     window.parent.postMessage({ type: focusMessage }, '*');
   }
@@ -43,7 +58,8 @@
   window.addEventListener('message', (event) => {
     if (event.source !== window.parent || event.data?.type !== suspendMessage) return;
     for (const context of contexts) {
-      if (context.state === 'running') context.suspend().catch(() => {});
+      const gain = focusGains.get(context);
+      if (gain) gain.gain.setTargetAtTime(0, context.currentTime, 0.005);
     }
     for (const media of document.querySelectorAll('audio, video')) media.pause();
   });
