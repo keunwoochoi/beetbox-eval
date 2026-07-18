@@ -4,6 +4,7 @@
 
   const focusMessage = 'beetbox:audio-focus';
   const suspendMessage = 'beetbox:audio-suspend';
+  const focusId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
   const contexts = new Set();
   const focusGains = new Map();
 
@@ -47,7 +48,7 @@
       const gain = focusGains.get(context);
       if (gain) gain.gain.setTargetAtTime(1, context.currentTime, 0.005);
     }
-    window.parent.postMessage({ type: focusMessage }, '*');
+    window.parent.postMessage({ type: focusMessage, focusId }, '*');
   }
 
   window.addEventListener('pointerdown', claimAudioFocus, true);
@@ -57,10 +58,13 @@
   window.addEventListener('keydown', claimAudioFocus, true);
   window.addEventListener('message', (event) => {
     if (event.source !== window.parent || event.data?.type !== suspendMessage) return;
+    const isActive = event.data.focusId === focusId;
     for (const context of contexts) {
       const gain = focusGains.get(context);
-      if (gain) gain.gain.setTargetAtTime(0, context.currentTime, 0.005);
+      if (gain) gain.gain.setTargetAtTime(isActive ? 1 : 0, context.currentTime, 0.005);
     }
-    for (const media of document.querySelectorAll('audio, video')) media.pause();
+    if (!isActive) {
+      for (const media of document.querySelectorAll('audio, video')) media.pause();
+    }
   });
 })();

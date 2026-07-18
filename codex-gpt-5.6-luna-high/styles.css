@@ -41,17 +41,22 @@ button { cursor: pointer; border: 0; }
 }
 
 .pixel-logo {
-  display: grid;
-  grid-template-columns: repeat(7, 7px);
-  grid-template-rows: repeat(7, 7px);
-  gap: 1.6px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
   width: 372px;
   height: 54px;
   align-content: start;
   overflow: hidden;
 }
 
-.pixel-logo span { background: var(--pale); }
+.pixel-letter {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 1.4px;
+}
+
+.pixel-letter span { background: var(--pale); }
 
 .brand-row h1 {
   margin: 0 0 5px;
@@ -314,6 +319,8 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 27px; border: 0; bo
 .key { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 22px; line-height: 23px; }
 .key span { color: var(--pale); }
 .key small { color: var(--muted); font-size: 16px; font-weight: 700; }
+.key.pressed { background: var(--pale); color: var(--ink); }
+.key.pressed span, .key.pressed small { color: var(--ink); }
 
 .help {
   margin-top: 23px;

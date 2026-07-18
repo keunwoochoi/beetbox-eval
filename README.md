@@ -12,13 +12,15 @@ I gave several coding models the visual reference plus one deliberately short in
 
 > Recreate the Beetbox web app shown in `beetbox.mov` and `beetbox_frames/` as faithfully as possible. Work autonomously and place the complete implementation in the current directory.
 
+GPT-5.6 Luna later received one retry with a single added sentence: “It should produce sound.”
+
 The arena preserves the resulting implementations and makes it possible to compare them beside the original capture. This is a qualitative exploration rather than a controlled benchmark: model versions, reasoning settings, harnesses, and agent behavior all affect the outcome.
 
 ## Live arena
 
 [Open Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/)
 
-Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. Audio focus follows the most recently used preview, automatically suspending audio from the other panel.
+Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. Audio focus follows the most recently used preview, automatically muting audio from the other panel.
 
 ## Run locally
 

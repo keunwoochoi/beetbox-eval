@@ -40,17 +40,14 @@ function itemUrl(item, cacheBust = '') {
   return `${window.location.protocol}//${hostname}:${item.port}/${cacheBust ? `?v=${cacheBust}` : ''}`;
 }
 
-function suspendPreview(iframe) {
-  iframe.contentWindow?.postMessage({ type: 'beetbox:audio-suspend' }, '*');
+function suspendPreview(iframe, focusId = null) {
+  iframe.contentWindow?.postMessage({ type: 'beetbox:audio-suspend', focusId }, '*');
 }
 
 window.addEventListener('message', (event) => {
-  if (event.data?.type !== 'beetbox:audio-focus') return;
+  if (event.data?.type !== 'beetbox:audio-focus' || typeof event.data.focusId !== 'string') return;
   const iframes = [...document.querySelectorAll('.preview-panel iframe')];
-  if (!iframes.some((iframe) => iframe.contentWindow === event.source)) return;
-  for (const iframe of iframes) {
-    if (iframe.contentWindow !== event.source) suspendPreview(iframe);
-  }
+  for (const iframe of iframes) suspendPreview(iframe, event.data.focusId);
 });
 
 function providerClass(provider) {
