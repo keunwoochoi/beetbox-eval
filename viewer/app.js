@@ -7,7 +7,6 @@ const REFERENCE = {
   effort: 'n/a',
   runner: 'Original',
   state: 'ready',
-  pinned: true,
   path: 'reference.html'
 };
 
@@ -16,15 +15,13 @@ const state = {
   a: 'reference',
   b: 'codex-sol-xhigh',
   mode: 'split',
-  scale: 'fit',
-  filter: 'pinned'
+  scale: 'fit'
 };
 
 const elements = {
   catalog: document.querySelector('#catalog'),
   comparison: document.querySelector('#comparison'),
   count: document.querySelector('#run-count'),
-  ready: document.querySelector('#ready-count'),
   selectA: document.querySelector('#select-a'),
   selectB: document.querySelector('#select-b')
 };
@@ -43,6 +40,19 @@ function itemUrl(item, cacheBust = '') {
   return `${window.location.protocol}//${hostname}:${item.port}/${cacheBust ? `?v=${cacheBust}` : ''}`;
 }
 
+function suspendPreview(iframe) {
+  iframe.contentWindow?.postMessage({ type: 'beetbox:audio-suspend' }, '*');
+}
+
+window.addEventListener('message', (event) => {
+  if (event.data?.type !== 'beetbox:audio-focus') return;
+  const iframes = [...document.querySelectorAll('.preview-panel iframe')];
+  if (!iframes.some((iframe) => iframe.contentWindow === event.source)) return;
+  for (const iframe of iframes) {
+    if (iframe.contentWindow !== event.source) suspendPreview(iframe);
+  }
+});
+
 function providerClass(provider) {
   if (provider === 'OpenAI') return 'openai';
   if (provider === 'Anthropic') return 'anthropic';
@@ -59,7 +69,7 @@ function providerGlyph(provider) {
 
 function optionLabel(item) {
   if (item.id === 'reference') return 'Reference · original video';
-  return `${item.label} · ${item.effort}${item.pinned ? '' : ' · unpinned'}`;
+  return `${item.label} · ${item.effort}`;
 }
 
 function renderSelects() {
@@ -72,9 +82,7 @@ function renderSelects() {
 }
 
 function visibleRuns() {
-  if (state.filter === 'all') return state.runs;
-  if (state.filter === 'pinned') return state.runs.filter((run) => run.pinned);
-  return state.runs.filter((run) => run.provider === state.filter);
+  return state.runs;
 }
 
 function renderCatalog() {
@@ -83,7 +91,7 @@ function renderCatalog() {
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     const glyph = providerGlyph(run.provider);
-    return `<button class="run-card ${providerClass(run.provider)} ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><i class="status ${run.state}"></i><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}${run.pinned ? '' : ' · unpinned'}</small></span><span class="provider-glyph">${glyph}</span></button>`;
+    return `<button class="run-card ${providerClass(run.provider)} ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small></span><span class="provider-glyph">${glyph}</span></button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -109,11 +117,12 @@ function updatePanel(side) {
   chip.textContent = item.provider;
   chip.className = `provider-chip ${providerClass(item.provider)}`;
   title.textContent = item.label;
-  detail.textContent = item.id === 'reference' ? item.detail : `${item.runner} · ${item.effort}${item.pinned ? '' : ' · unpinned'}`;
+  detail.textContent = item.id === 'reference' ? item.detail : `${item.runner} · ${item.effort}`;
   panel.classList.toggle('waiting', !['ready', 'missing', 'error'].includes(item.state));
   panel.querySelector('.loading-card').lastChild.textContent = item.state === 'starting' ? 'Preview is starting' : 'Preparing preview';
 
   if (iframe.dataset.item !== item.id) {
+    suspendPreview(iframe);
     iframe.dataset.item = item.id;
     iframe.src = nextUrl;
   }
@@ -138,22 +147,22 @@ function render() {
   renderSelects();
   renderCatalog();
   elements.comparison.className = `comparison ${state.mode} ${state.scale}`;
+  if (state.mode === 'solo') suspendPreview(document.querySelector('.preview-panel[data-side="b"] iframe'));
   document.querySelectorAll('[data-mode]').forEach((button) => button.classList.toggle('active', button.dataset.mode === state.mode));
   document.querySelectorAll('[data-scale]').forEach((button) => button.classList.toggle('active', button.dataset.scale === state.scale));
-  document.querySelectorAll('[data-filter]').forEach((button) => button.classList.toggle('active', button.dataset.filter === state.filter));
   updatePanel('a');
   updatePanel('b');
   requestAnimationFrame(fitPreviews);
 }
 
 function persist() {
-  const params = new URLSearchParams({ a: state.a, b: state.b, mode: state.mode, scale: state.scale, filter: state.filter });
+  const params = new URLSearchParams({ a: state.a, b: state.b, mode: state.mode, scale: state.scale });
   history.replaceState(null, '', `#${params}`);
 }
 
 function restore() {
   const params = new URLSearchParams(location.hash.slice(1));
-  for (const key of ['a', 'b', 'mode', 'scale', 'filter']) {
+  for (const key of ['a', 'b', 'mode', 'scale']) {
     if (params.has(key)) state[key] = params.get(key);
   }
 }
@@ -163,14 +172,11 @@ async function fetchRuns(initial = false) {
   const payload = await response.json();
   const previous = new Map(state.runs.map((run) => [run.id, run.state]));
   state.runs = payload.runs;
-  const ready = state.runs.filter((run) => run.state === 'ready').length;
-  elements.ready.textContent = `${ready}/${state.runs.length} previews ready`;
-
   if (initial) {
     restore();
     const validIds = new Set(['reference', ...state.runs.map((run) => run.id)]);
     if (!validIds.has(state.a)) state.a = 'reference';
-    if (!validIds.has(state.b) || state.b === 'reference') state.b = state.runs.find((run) => run.pinned)?.id || 'reference';
+    if (!validIds.has(state.b) || state.b === 'reference') state.b = state.runs[0]?.id || 'reference';
     render();
     return;
   }
@@ -200,24 +206,13 @@ document.querySelectorAll('[data-scale]').forEach((button) => button.addEventLis
   persist();
   render();
 }));
-document.querySelectorAll('[data-filter]').forEach((button) => button.addEventListener('click', () => {
-  state.filter = button.dataset.filter;
-  document.querySelectorAll('[data-filter]').forEach((candidate) => candidate.classList.toggle('active', candidate === button));
-  persist();
-  renderCatalog();
-}));
 elements.selectA.addEventListener('change', () => { state.a = elements.selectA.value; persist(); render(); });
 elements.selectB.addEventListener('change', () => { state.b = elements.selectB.value; persist(); render(); });
 document.querySelector('#swap').addEventListener('click', () => { [state.a, state.b] = [state.b, state.a]; persist(); render(); });
 
-const help = document.querySelector('#help-dialog');
-document.querySelector('#show-help').addEventListener('click', () => help.showModal());
-help.querySelector('.dialog-close').addEventListener('click', () => help.close());
-help.addEventListener('click', (event) => { if (event.target === help) help.close(); });
-
 let browseIndex = 0;
 document.addEventListener('keydown', (event) => {
-  if (event.target.matches('select, button, input') || help.open) return;
+  if (event.target.matches('select, button, input')) return;
   if (!['ArrowUp', 'ArrowDown'].includes(event.key)) return;
   event.preventDefault();
   const runs = visibleRuns();
@@ -233,7 +228,6 @@ new ResizeObserver(fitPreviews).observe(elements.comparison);
 window.addEventListener('hashchange', () => { restore(); render(); });
 
 fetchRuns(true).catch((error) => {
-  elements.ready.textContent = 'Dashboard server unavailable';
   console.error(error);
 });
 setInterval(() => fetchRuns(false).catch(console.error), 3000);

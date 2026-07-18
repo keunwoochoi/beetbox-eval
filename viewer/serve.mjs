@@ -12,6 +12,7 @@ const promptDir = join(repoDir, 'prompt');
 const dashboardPort = Number(process.env.PORT || 4000);
 const host = process.env.HOST || '0.0.0.0';
 const viteBin = join(viewerDir, 'node_modules', 'vite', 'bin', 'vite.js');
+const viteConfig = join(viewerDir, 'vite.preview.config.mjs');
 
 const runs = runDefinitions.map((run) => ({ ...run, state: 'queued', message: '' }));
 
@@ -51,7 +52,7 @@ async function launchRun(run) {
   }
 
   run.state = 'starting';
-  const child = spawn(process.execPath, [viteBin, '--host', host, '--port', String(run.port), '--strictPort', '--clearScreen', 'false'], {
+  const child = spawn(process.execPath, [viteBin, '--config', viteConfig, '--host', host, '--port', String(run.port), '--strictPort', '--clearScreen', 'false'], {
     cwd: root,
     env: { ...process.env, BROWSER: 'none', FORCE_COLOR: '0' },
     stdio: ['ignore', 'pipe', 'pipe']

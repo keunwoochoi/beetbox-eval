@@ -11,7 +11,8 @@ const referenceDir = join(repoDir, 'prompt');
 
 const excludedDirectories = new Set(['.git', 'beetbox_frames', 'dist', 'node_modules']);
 const excludedFiles = new Set(['.DS_Store', '.gitignore', 'PROMPT.md', 'README.md', 'beetbox.mov', 'package-lock.json', 'package.json']);
-const viewerAssets = ['app.js', 'index.html', 'reference.html', 'styles.css'];
+const viewerAssets = ['app.js', 'audio-focus.js', 'index.html', 'reference.html', 'styles.css'];
+const audioFocusSource = await readFile(join(viewerDir, 'audio-focus.js'), 'utf8');
 
 function shouldCopyRunAsset(source, runRoot) {
   if (source === runRoot) return true;
@@ -30,7 +31,10 @@ async function rewriteRootRelativeHtml(directory) {
     }
     if (extname(entry.name).toLowerCase() !== '.html') return;
     const source = await readFile(path, 'utf8');
-    const rewritten = source.replace(/(\b(?:href|src)\s*=\s*["'])\/(?!\/)/gi, '$1./');
+    let rewritten = source.replace(/(\b(?:href|src)\s*=\s*["'])\/(?!\/)/gi, '$1./');
+    if (entry.name === 'index.html' && !rewritten.includes('data-beetbox-audio-focus')) {
+      rewritten = rewritten.replace(/<head([^>]*)>/i, `$&\n<script data-beetbox-audio-focus>\n${audioFocusSource}\n</script>`);
+    }
     await writeFile(path, rewritten);
   }));
 }

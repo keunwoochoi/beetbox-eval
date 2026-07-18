@@ -15,30 +15,18 @@
           <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
           <span><strong>BEETBOX</strong><small>MODEL ARENA</small></span>
         </a>
-        <div class="topbar-note"><span class="live-dot"></span><span id="ready-count">Starting previews…</span></div>
         <div class="topbar-actions">
-          <button class="quiet-button" id="show-help" type="button">How to compare</button>
           <a class="quiet-button" href="reference.html" target="_blank" rel="noreferrer">Reference ↗</a>
         </div>
       </header>
 
       <aside class="sidebar">
         <div class="sidebar-heading">
-          <div><span class="eyebrow">RUN CATALOG</span><strong>Implementations</strong></div>
+          <div><strong>Implementations</strong></div>
           <span class="count-pill" id="run-count">0</span>
-        </div>
-        <div class="filters" role="group" aria-label="Filter runs">
-          <button class="filter active" data-filter="pinned" type="button">Pinned</button>
-          <button class="filter" data-filter="OpenAI" type="button">GPT</button>
-          <button class="filter" data-filter="Anthropic" type="button">Claude</button>
-          <button class="filter" data-filter="MiniMax" type="button">MiniMax</button>
-          <button class="filter" data-filter="all" type="button">All</button>
         </div>
         <div class="catalog" id="catalog" aria-live="polite"></div>
         <div class="sidebar-foot">
-          <span class="status-key"><i class="ready"></i>Ready</span>
-          <span class="status-key"><i class="starting"></i>Starting</span>
-          <p>Audio begins after you interact with a preview. Pause one sequencer before playing another.</p>
           <p class="project-note"><strong>Independent reconstruction study.</strong> Inspired by the Beetbox showcase in the <a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noreferrer">Kimi K3 release blog ↗</a>. Not affiliated with Kimi or Moonshot AI.</p>
         </div>
       </aside>
@@ -78,19 +66,6 @@
         <footer class="workspace-foot"><span><kbd>↑</kbd><kbd>↓</kbd> browse runs</span><span>All previews use the original 1454×1622 canvas in Fit mode.</span></footer>
       </main>
     </div>
-
-    <dialog id="help-dialog">
-      <button class="dialog-close" type="button" aria-label="Close">×</button>
-      <span class="eyebrow">QUICK GUIDE</span>
-      <h2>Compare behavior, not just screenshots.</h2>
-      <ol>
-        <li>Keep the reference on side A and choose implementations for side B.</li>
-        <li>Use <strong>Fit</strong> for consistent visual scale or <strong>Responsive</strong> for full interaction.</li>
-        <li>Try transport, presets, sequencer cells, mute controls, keyboard notes, and loop recording.</li>
-        <li>Open promising runs in a separate tab for uninterrupted audio testing.</li>
-      </ol>
-      <p>The two legacy baselines are labeled unpinned because they were produced by generic subagents rather than their named provider CLIs.</p>
-    </dialog>
 
     <script type="module" src="app.js"></script>
   </body>

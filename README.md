@@ -18,7 +18,7 @@ The arena preserves the resulting implementations and makes it possible to compa
 
 [Open Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/)
 
-Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. Browser audio begins only after user interaction.
+Use **Fit** for a consistent 1454×1622 comparison canvas or **Responsive** for direct interaction. Audio focus follows the most recently used preview, automatically suspending audio from the other panel.
 
 ## Run locally
 
