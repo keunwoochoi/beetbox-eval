@@ -7,5 +7,6 @@ export const runDefinitions = [
   { id: 'claude-opus-xhigh', label: 'Claude Opus 4.8', detail: 'Extra-high effort', provider: 'Anthropic', model: 'claude-opus-4-8', effort: 'xhigh', runner: 'Claude Code', folder: 'claude-code-opus-4.8-xhigh', port: 4112 },
   { id: 'claude-sonnet-high', label: 'Claude Sonnet 5', detail: 'High effort', provider: 'Anthropic', model: 'claude-sonnet-5', effort: 'high', runner: 'Claude Code', folder: 'claude-code-sonnet-5-high', port: 4113 },
   { id: 'claude-haiku', label: 'Claude Haiku 4.5', detail: 'Default effort', provider: 'Anthropic', model: 'claude-haiku-4-5', effort: 'default', runner: 'Claude Code', folder: 'claude-code-haiku-4.5', port: 4114 },
-  { id: 'minimax-m3', label: 'MiniMax M3', detail: 'Default effort', provider: 'MiniMax', model: 'minimax-m3', effort: 'default', runner: 'OpenCode', folder: 'opencode-minimax-m3', port: 4131 }
+  { id: 'minimax-m3', label: 'MiniMax M3', detail: 'Default effort', provider: 'MiniMax', model: 'minimax-m3', effort: 'default', runner: 'OpenCode', folder: 'opencode-minimax-m3', port: 4131 },
+  { id: 'qwen3.7-plus', label: 'Qwen3.7 Plus', detail: 'Default effort', provider: 'Alibaba', model: 'qwen3.7-plus', effort: 'default', runner: 'OpenCode', folder: 'opencode-qwen3.7-plus', port: 4132 }
 ];

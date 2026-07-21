@@ -12,6 +12,7 @@
   --openai: #65d6a3;
   --anthropic: #eaa373;
   --minimax: #8eb8ff;
+  --alibaba: #bb9cff;
   --source: #a6b7ff;
   --danger: #ff7f6f;
   --sidebar: 290px;
@@ -101,6 +102,7 @@ button { cursor: pointer; }
 .run-card.openai .provider-glyph { color: var(--openai); }
 .run-card.anthropic .provider-glyph { color: var(--anthropic); }
 .run-card.minimax .provider-glyph { color: var(--minimax); }
+.run-card.alibaba .provider-glyph { color: var(--alibaba); }
 
 .sidebar-foot { padding: 14px 18px 16px; border-top: 1px solid var(--line-soft); color: var(--muted); }
 .sidebar-foot p { margin: 10px 0 0; font-size: 10px; line-height: 1.45; }
@@ -133,6 +135,7 @@ button { cursor: pointer; }
 .provider-chip.openai { color: var(--openai); }
 .provider-chip.anthropic { color: var(--anthropic); }
 .provider-chip.minimax { color: var(--minimax); }
+.provider-chip.alibaba { color: var(--alibaba); }
 .preview-actions { display: flex; gap: 5px; margin-left: auto; }
 .preview-actions button { border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--muted); padding: 6px 8px; font-size: 9px; }
 .preview-actions button:hover { color: var(--text); border-color: #53594c; }

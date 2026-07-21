@@ -56,6 +56,7 @@ function providerClass(provider) {
   if (provider === 'OpenAI') return 'openai';
   if (provider === 'Anthropic') return 'anthropic';
   if (provider === 'MiniMax') return 'minimax';
+  if (provider === 'Alibaba') return 'alibaba';
   return 'source';
 }
 
@@ -63,6 +64,7 @@ function providerGlyph(provider) {
   if (provider === 'OpenAI') return 'GPT';
   if (provider === 'Anthropic') return 'CLD';
   if (provider === 'MiniMax') return 'MM';
+  if (provider === 'Alibaba') return 'QW';
   return 'SRC';
 }
 
