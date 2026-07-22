@@ -156,7 +156,7 @@ button { cursor: pointer; }
 .enter-arena:hover b { transform: translateX(5px); }
 .method-link { color: var(--muted); font-size: 12px; text-underline-offset: 4px; }
 .method-link:hover { color: var(--text); }
-.landing-prompt { display: flex; align-items: flex-start; flex-direction: column; width: min(560px, 100%); margin-top: 42px; }
+.landing-prompt { display: flex; align-items: flex-start; flex-direction: column; width: min(560px, 100%); margin: 42px auto 0; }
 .landing-prompt video { display: block; width: 100%; border: 1px solid var(--line); background: #000; }
 .landing-prompt-copy { width: 100%; margin-top: 16px; border: 1px solid var(--line); background: rgba(23, 25, 21, .94); padding: 22px 24px 24px; }
 .landing-prompt-copy h2 { margin: 0; color: var(--acid); font: 700 10px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
@@ -164,6 +164,12 @@ button { cursor: pointer; }
 .landing-prompt-copy code { color: var(--acid); }
 .prompt-note { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .prompt-note a { color: var(--text); text-underline-offset: 3px; }
+.evaluation-notes { width: 100%; margin-top: 42px; border-top: 1px solid var(--line); }
+.evaluation-notes > h2 { margin: 0; padding: 18px 0; border-bottom: 1px solid var(--line); color: var(--acid); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
+.evaluation-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.evaluation-item h3 { margin: 0; color: var(--text); font-size: 15px; font-weight: 650; }
+.evaluation-item p { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.evaluation-item code { color: var(--acid); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
 .landing-prompt .method-link { margin-top: 18px; }
 
 @media (max-width: 900px) {

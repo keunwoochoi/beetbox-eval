@@ -7,7 +7,7 @@
     <title>Beetbox Model Arena</title>
     <meta name="description" content="Interactive Beetbox reconstructions made by coding models from the same visual reference and short prompt." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=prompt-note" />
+    <link rel="stylesheet" href="styles.css?v=evaluation-notes" />
   </head>
   <body class="landing-page">
     <header class="landing-header">
@@ -33,6 +33,23 @@
           <p>Recreate the Beetbox web app shown in <code>beetbox.mov</code> and <code>beetbox_frames/</code> as faithfully as possible. Work autonomously and place the complete implementation in the current directory.</p>
         </div>
         <p class="prompt-note">The video comes from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>. I kept the text prompt minimal and also supplied one screenshot per second, so models without video input received a consistent visual reference while video-capable models could use the full clip.</p>
+
+        <section class="evaluation-notes" aria-labelledby="evaluation-heading">
+          <h2 id="evaluation-heading">What I look for</h2>
+          <div class="evaluation-item">
+            <h3>Does it work?</h3>
+            <p>It should make sound, and the sequencer, tempo, swing, and volume controls should actually work.</p>
+          </div>
+          <div class="evaluation-item">
+            <h3>Did it read the reference correctly?</h3>
+            <p>On the lead channel, steps 13 and 16 appear to be <code>C+</code> and <code>A+</code>—an octave up—not C-sharp and A-sharp. That small detail is a useful image-understanding test.</p>
+          </div>
+          <div class="evaluation-item">
+            <h3>What did it invent?</h3>
+            <p>The ASCII visualization is subjective, so its complexity and character matter. I also listen for whether DARKROOM, GREASE, BACKSTREET, DAYLIGHT, and ACID produce convincing, distinct rhythms suggested by their names.</p>
+          </div>
+        </section>
+
         <a class="method-link" href="https://github.com/keunwoochoi/beetbox-eval">Source code</a>
       </section>
     </main>
