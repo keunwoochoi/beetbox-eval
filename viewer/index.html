@@ -5,68 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
     <title>Beetbox Model Arena</title>
+    <meta name="description" content="Interactive Beetbox reconstructions made by coding models from the same visual reference and short prompt." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=landing" />
   </head>
-  <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <a class="brand" href="#" aria-label="Beetbox Model Arena home">
-          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-          <span><strong>BEETBOX</strong><small>MODEL ARENA</small></span>
-        </a>
-        <div class="topbar-actions">
-          <a class="quiet-button" href="reference.html" target="_blank" rel="noreferrer">Reference ↗</a>
-        </div>
-      </header>
+  <body class="landing-page">
+    <header class="landing-header">
+      <a class="landing-title" href="index.html" aria-label="Beetbox Model Arena home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <strong>BEETBOX MODEL ARENA</strong>
+      </a>
+      <span class="landing-byline">by <a href="https://keunwoochoi.github.io/">Keunwoo Choi</a></span>
+    </header>
 
-      <aside class="sidebar">
-        <div class="sidebar-heading">
-          <div><strong>Implementations</strong></div>
-          <span class="count-pill" id="run-count">0</span>
-        </div>
-        <div class="catalog" id="catalog" aria-live="polite"></div>
-        <div class="sidebar-foot">
-          <p class="project-note"><strong>Independent reconstruction study.</strong> Inspired by the Beetbox showcase in the <a href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noreferrer">Kimi K3 release blog ↗</a>. Not affiliated with Kimi or Moonshot AI.</p>
-        </div>
-      </aside>
+    <main class="landing-main">
+      <p class="landing-kicker">A visual-to-code reconstruction experiment</p>
+      <h1>One reference.<br />Different models.</h1>
+      <p class="landing-lede">We gave coding models the same 19-second screen recording, extracted frames, and a deliberately short prompt to reconstruct Beetbox autonomously. This arena lets you compare and play their results beside the original.</p>
 
-      <main class="workspace">
-        <section class="controls" aria-label="Comparison controls">
-          <div class="mode-switch" role="group" aria-label="View mode">
-            <button data-mode="solo" type="button">Solo</button>
-            <button class="active" data-mode="split" type="button">Split</button>
-          </div>
-          <label class="select-control"><span>A</span><select id="select-a" aria-label="Choose left preview"></select></label>
-          <button class="icon-button" id="swap" type="button" title="Swap previews" aria-label="Swap previews">⇄</button>
-          <label class="select-control second"><span>B</span><select id="select-b" aria-label="Choose right preview"></select></label>
-          <div class="scale-switch" role="group" aria-label="Preview scale">
-            <button class="active" data-scale="fit" type="button">Fit</button>
-            <button data-scale="native" type="button">Responsive</button>
-          </div>
-        </section>
-
-        <section class="comparison split" id="comparison">
-          <article class="preview-panel" data-side="a">
-            <header class="preview-header">
-              <div class="preview-identity"><span class="provider-chip">Source</span><div><strong>Reference video</strong><small>Original Beetbox capture</small></div></div>
-              <div class="preview-actions"><button class="reload" type="button">Reload</button><button class="open" type="button">Open ↗</button></div>
-            </header>
-            <div class="viewport"><div class="canvas"><iframe title="Preview A" loading="eager" allow="autoplay; fullscreen" allowfullscreen></iframe></div><div class="loading-card"><span></span>Preview is starting</div></div>
-          </article>
-          <article class="preview-panel" data-side="b">
-            <header class="preview-header">
-              <div class="preview-identity"><span class="provider-chip">OpenAI</span><div><strong>GPT-5.6 Sol</strong><small>Codex CLI · xhigh</small></div></div>
-              <div class="preview-actions"><button class="reload" type="button">Reload</button><button class="open" type="button">Open ↗</button></div>
-            </header>
-            <div class="viewport"><div class="canvas"><iframe title="Preview B" loading="eager" allow="autoplay; fullscreen" allowfullscreen></iframe></div><div class="loading-card"><span></span>Preview is starting</div></div>
-          </article>
-        </section>
-
-        <footer class="workspace-foot"><span><kbd>↑</kbd><kbd>↓</kbd> browse runs</span><span>All previews use the original 1454×1622 canvas in Fit mode.</span></footer>
-      </main>
-    </div>
-
-    <script type="module" src="app.js?v=safari-top-audio"></script>
+      <div class="landing-actions">
+        <a class="enter-arena" href="arena.html"><span>Enter the arena</span><b aria-hidden="true">→</b></a>
+        <a class="method-link" href="https://github.com/keunwoochoi/beetbox-eval">Methodology, prompts, and source <span aria-hidden="true">↗</span></a>
+      </div>
+    </main>
   </body>
 </html>

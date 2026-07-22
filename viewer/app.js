@@ -23,7 +23,6 @@ const previewCacheBust = Date.now();
 const elements = {
   catalog: document.querySelector('#catalog'),
   comparison: document.querySelector('#comparison'),
-  count: document.querySelector('#run-count'),
   selectA: document.querySelector('#select-a'),
   selectB: document.querySelector('#select-b')
 };
@@ -88,7 +87,6 @@ function visibleRuns() {
 
 function renderCatalog() {
   const runs = visibleRuns();
-  elements.count.textContent = runs.length;
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     const glyph = providerGlyph(run.provider);
@@ -209,7 +207,6 @@ document.querySelectorAll('[data-scale]').forEach((button) => button.addEventLis
 }));
 elements.selectA.addEventListener('change', () => { state.a = elements.selectA.value; persist(); render(); });
 elements.selectB.addEventListener('change', () => { state.b = elements.selectB.value; persist(); render(); });
-document.querySelector('#swap').addEventListener('click', () => { [state.a, state.b] = [state.b, state.a]; persist(); render(); });
 
 let browseIndex = 0;
 document.addEventListener('keydown', (event) => {
