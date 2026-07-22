@@ -158,12 +158,12 @@ button { cursor: pointer; }
 .method-link:hover { color: var(--text); }
 .landing-prompt { display: flex; align-items: flex-start; flex-direction: column; width: min(560px, 100%); margin-top: 42px; }
 .landing-prompt video { display: block; width: 100%; border: 1px solid var(--line); background: #000; }
-.video-credit { width: 100%; margin: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); padding: 11px 14px; color: var(--muted); font-size: 11px; }
-.video-credit a { color: var(--text); text-underline-offset: 3px; }
 .landing-prompt-copy { width: 100%; margin-top: 16px; border: 1px solid var(--line); background: rgba(23, 25, 21, .94); padding: 22px 24px 24px; }
 .landing-prompt-copy h2 { margin: 0; color: var(--acid); font: 700 10px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
 .landing-prompt-copy p { margin: 14px 0 0; color: var(--text); font: 13px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .landing-prompt-copy code { color: var(--acid); }
+.prompt-note { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.prompt-note a { color: var(--text); text-underline-offset: 3px; }
 .landing-prompt .method-link { margin-top: 18px; }
 
 @media (max-width: 900px) {

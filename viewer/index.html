@@ -7,7 +7,7 @@
     <title>Beetbox Model Arena</title>
     <meta name="description" content="Interactive Beetbox reconstructions made by coding models from the same visual reference and short prompt." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=kimi-k3" />
+    <link rel="stylesheet" href="styles.css?v=prompt-note" />
   </head>
   <body class="landing-page">
     <header class="landing-header">
@@ -28,11 +28,11 @@
 
       <section class="landing-prompt" aria-labelledby="prompt-heading">
         <video controls playsinline preload="metadata" poster="reference/beetbox_frames/second_00.jpg" src="reference/beetbox.mov"></video>
-        <p class="video-credit">This video is from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>.</p>
         <div class="landing-prompt-copy">
           <h2 id="prompt-heading">Prompt</h2>
           <p>Recreate the Beetbox web app shown in <code>beetbox.mov</code> and <code>beetbox_frames/</code> as faithfully as possible. Work autonomously and place the complete implementation in the current directory.</p>
         </div>
+        <p class="prompt-note">The video comes from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>. I kept the text prompt minimal and also supplied one screenshot per second, so models without video input received a consistent visual reference while video-capable models could use the full clip.</p>
         <a class="method-link" href="https://github.com/keunwoochoi/beetbox-eval">Source code</a>
       </section>
     </main>
