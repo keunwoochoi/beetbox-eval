@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEETBOX</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="desk">
+
+  <header class="masthead">
+    <canvas id="logo" width="244" height="40" aria-label="BEETBOX"></canvas>
+    <span class="tagline">Beat sequencing &middot; channel desk.</span>
+  </header>
+
+  <section class="transport">
+    <button id="playBtn" class="btn play-btn" type="button">&#9654; PLAY</button>
+
+    <div class="slider-box">
+      <div class="slider-head"><label for="tempo">TEMPO</label><span class="val" id="tempoVal">132</span></div>
+      <input type="range" id="tempo" min="60" max="180" step="1" value="132">
+    </div>
+
+    <div class="slider-box">
+      <div class="slider-head"><label for="swing">SWING</label><span class="val" id="swingVal">0%</span></div>
+      <input type="range" id="swing" min="0" max="50" step="1" value="0">
+    </div>
+
+    <div class="slider-box">
+      <div class="slider-head"><label for="volume">VOLUME</label><span class="val" id="volumeVal">90</span></div>
+      <input type="range" id="volume" min="0" max="100" step="1" value="90">
+    </div>
+
+    <div class="onair" id="onair"><span class="lamp"></span>ON&nbsp;AIR</div>
+  </section>
+
+  <nav class="channels" id="channels"></nav>
+
+  <div class="editrow">
+    <button id="clearBtn" class="btn small" type="button">CLEAR</button>
+    <button id="randomBtn" class="btn small" type="button">RANDOM</button>
+  </div>
+
+  <canvas id="viz" height="380"></canvas>
+
+  <section class="seq">
+    <div class="track-col">
+      <div class="track-head">TRACK click = mute &#8615;</div>
+      <div id="trackList"></div>
+    </div>
+    <div class="grid-col">
+      <div class="stepnums" id="stepNums"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="recrow">
+    <button id="loopRecBtn" class="btn rec" type="button"><span class="sq"></span>LOOP REC</button>
+    <div class="inst-tabs">
+      <button id="leadTab" class="btn inst active" type="button">LEAD</button>
+      <button id="bassTab" class="btn inst" type="button">BASS</button>
+    </div>
+  </section>
+
+  <section class="pads" id="pads"></section>
+
+  <footer class="help">
+    <p>Click cells to write beats &middot; tap LEAD / BASS to cycle pitch (right-click lowers) &middot; click a track name to mute</p>
+    <p>Space play/stop</p>
+  </footer>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>

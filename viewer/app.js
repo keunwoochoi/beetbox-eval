@@ -56,6 +56,7 @@ function providerClass(provider) {
   if (provider === 'Anthropic') return 'anthropic';
   if (provider === 'MiniMax') return 'minimax';
   if (provider === 'Alibaba') return 'alibaba';
+  if (provider === 'Moonshot') return 'moonshot';
   return 'source';
 }
 
@@ -64,6 +65,7 @@ function providerGlyph(provider) {
   if (provider === 'Anthropic') return 'CLD';
   if (provider === 'MiniMax') return 'MM';
   if (provider === 'Alibaba') return 'QW';
+  if (provider === 'Moonshot') return 'K3';
   return 'SRC';
 }
 

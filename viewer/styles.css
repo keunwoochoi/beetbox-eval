@@ -13,6 +13,7 @@
   --anthropic: #eaa373;
   --minimax: #8eb8ff;
   --alibaba: #bb9cff;
+  --moonshot: #ff8fbd;
   --source: #a6b7ff;
   --danger: #ff7f6f;
   --sidebar: 290px;
@@ -91,6 +92,7 @@ button { cursor: pointer; }
 .run-card.anthropic .provider-glyph { color: var(--anthropic); }
 .run-card.minimax .provider-glyph { color: var(--minimax); }
 .run-card.alibaba .provider-glyph { color: var(--alibaba); }
+.run-card.moonshot .provider-glyph { color: var(--moonshot); }
 
 .workspace { display: grid; grid-template-rows: auto minmax(0, 1fr); min-width: 0; min-height: 0; }
 .controls { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 10px 12px; border-bottom: 1px solid var(--line); background: #141612; }
@@ -116,6 +118,7 @@ button { cursor: pointer; }
 .provider-chip.anthropic { color: var(--anthropic); }
 .provider-chip.minimax { color: var(--minimax); }
 .provider-chip.alibaba { color: var(--alibaba); }
+.provider-chip.moonshot { color: var(--moonshot); }
 .preview-actions { display: flex; gap: 5px; margin-left: auto; }
 .preview-actions button { border: 1px solid var(--line); border-radius: 6px; background: transparent; color: var(--muted); padding: 6px 8px; font-size: 9px; }
 .preview-actions button:hover { color: var(--text); border-color: #53594c; }
