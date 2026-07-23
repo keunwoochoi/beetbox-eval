@@ -5,7 +5,7 @@ dialog.innerHTML = `
   <div class="about-dialog-card">
     <header class="about-dialog-header">
       <div>
-        <h1 id="about-dialog-title">One-shot implementing Beetbox 🥁</h1>
+        <h1 id="about-dialog-title">Can AI one-shot implement Beetbox? 🥁</h1>
         <p>screen recording --&gt; [AI] --&gt; webapp?</p>
       </div>
       <button class="about-dialog-close" type="button" aria-label="Close About Beetbox Eval Arena">Close</button>
