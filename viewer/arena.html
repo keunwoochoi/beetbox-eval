@@ -6,13 +6,14 @@
     <meta name="color-scheme" content="dark" />
     <title>Beetbox Eval Arena</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=audio-status" />
+    <link rel="stylesheet" href="styles.css?v=score-columns" />
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar" data-site-header></header>
 
       <aside class="sidebar">
+        <div class="catalog-header" aria-hidden="true"><span></span><strong>AUDIO</strong></div>
         <div class="catalog" id="catalog" aria-live="polite"></div>
       </aside>
 
@@ -41,6 +42,6 @@
     </div>
 
     <script type="module" src="site-header.js?v=shared-header"></script>
-    <script type="module" src="app.js?v=audio-status"></script>
+    <script type="module" src="app.js?v=score-columns"></script>
   </body>
 </html>

@@ -59,15 +59,6 @@ function providerClass(provider) {
   return 'source';
 }
 
-function providerGlyph(provider) {
-  if (provider === 'OpenAI') return 'GPT';
-  if (provider === 'Anthropic') return 'CLD';
-  if (provider === 'MiniMax') return 'MM';
-  if (provider === 'Alibaba') return 'QW';
-  if (provider === 'Moonshot') return 'K3';
-  return 'SRC';
-}
-
 function optionLabel(item) {
   if (item.id === 'reference') return 'Reference · original video';
   return `${item.label} · ${item.effort}`;
@@ -84,26 +75,17 @@ function visibleRuns() {
   return state.runs;
 }
 
-function evaluationBadges(run) {
-  const axes = {
-    audio: { pass: 'Audio works', warn: 'Audio weak', fail: 'No audio' },
-    pitch: { pass: 'Pitch correct', warn: 'Pitch partial', fail: 'Pitch wrong' },
-    controls: { pass: 'Controls work', warn: 'Controls partial', fail: 'Controls missing' },
-    ascii: { pass: 'ASCII strong', warn: 'ASCII basic', fail: 'ASCII missing' }
-  };
-  return Object.entries(run.evaluation || {}).map(([axis, rating]) => {
-    const label = axes[axis]?.[rating];
-    if (!label) return '';
-    return `<span class="evaluation-badge ${rating}" title="${label}"><i aria-hidden="true"></i>${label}</span>`;
-  }).join('');
+function audioScore(run) {
+  const rating = run.evaluation?.audio || 'unrated';
+  const labels = { pass: 'Audio: strong', warn: 'Audio: mediocre', fail: 'Audio: failed', unrated: 'Audio: not rated' };
+  return `<span class="audio-score ${rating}" role="img" aria-label="${labels[rating]}" title="${labels[rating]}"></span>`;
 }
 
 function renderCatalog() {
   const runs = visibleRuns();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
-    const glyph = providerGlyph(run.provider);
-    return `<button class="run-card ${providerClass(run.provider)} ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small><span class="evaluation-badges">${evaluationBadges(run)}</span></span><span class="provider-glyph">${glyph}</span></button>`;
+    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small></span>${audioScore(run)}</button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
