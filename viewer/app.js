@@ -149,11 +149,14 @@ function fitPreviews() {
     const iframe = viewport.querySelector('iframe');
     const item = itemById(iframe.dataset.item);
     const previewWidth = item.previewWidth || 1454;
-    const scale = viewport.clientWidth / previewWidth;
+    const wideViewport = viewport.clientWidth / viewport.clientHeight >= 1.1;
+    const framing = wideViewport ? 0.86 : 1;
+    const scale = (viewport.clientWidth / previewWidth) * framing;
     const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
     iframe.style.width = `${previewWidth}px`;
     iframe.style.height = `${previewHeight}px`;
+    iframe.style.left = `${Math.max(0, (viewport.clientWidth - (previewWidth * scale)) / 2)}px`;
   });
 }
 
