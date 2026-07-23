@@ -11,7 +11,7 @@ const referenceDir = join(repoDir, 'prompt');
 
 const excludedDirectories = new Set(['.git', 'beetbox_frames', 'dist', 'node_modules']);
 const excludedFiles = new Set(['.DS_Store', '.gitignore', 'PROMPT.md', 'README.md', 'beetbox.mov', 'package-lock.json', 'package.json']);
-const viewerAssets = ['about-dialog.js', 'app.js', 'arena.html', 'audio-focus.js', 'index.html', 'reference.html', 'site-header.js', 'styles.css'];
+const viewerAssets = ['about-dialog.js', 'app.js', 'apple-touch-icon.png', 'arena.html', 'audio-focus.js', 'icon-192.png', 'icon-512.png', 'icon.svg', 'index.html', 'og-image.png', 'og-image.svg', 'reference.html', 'robots.txt', 'site-header.js', 'site.webmanifest', 'sitemap.xml', 'styles.css'];
 const audioFocusSource = await readFile(join(viewerDir, 'audio-focus.js'), 'utf8');
 
 function shouldCopyRunAsset(source, runRoot) {
@@ -33,7 +33,7 @@ async function rewriteRootRelativeHtml(directory) {
     const source = await readFile(path, 'utf8');
     let rewritten = source.replace(/(\b(?:href|src)\s*=\s*["'])\/(?!\/)/gi, '$1./');
     if (entry.name === 'index.html' && !rewritten.includes('data-beetbox-audio-focus')) {
-      rewritten = rewritten.replace(/<head([^>]*)>/i, `$&\n<script data-beetbox-audio-focus>\n${audioFocusSource}\n</script>`);
+      rewritten = rewritten.replace(/<head([^>]*)>/i, `$&\n<meta name="robots" content="noindex, nofollow" />\n<script data-beetbox-audio-focus>\n${audioFocusSource}\n</script>`);
     }
     await writeFile(path, rewritten);
   }));
