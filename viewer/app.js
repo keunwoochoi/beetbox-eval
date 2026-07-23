@@ -22,7 +22,6 @@ const previewCacheBust = Date.now();
 const elements = {
   catalog: document.querySelector('#catalog'),
   comparison: document.querySelector('#comparison'),
-  selectA: document.querySelector('#select-a'),
   referenceToggle: document.querySelector('#reference-toggle')
 };
 
@@ -49,27 +48,6 @@ window.addEventListener('message', (event) => {
   const iframes = [...document.querySelectorAll('.preview-panel iframe')];
   for (const iframe of iframes) suspendPreview(iframe, event.data.focusId);
 });
-
-function providerClass(provider) {
-  if (provider === 'OpenAI') return 'openai';
-  if (provider === 'Anthropic') return 'anthropic';
-  if (provider === 'MiniMax') return 'minimax';
-  if (provider === 'Alibaba') return 'alibaba';
-  if (provider === 'Moonshot') return 'moonshot';
-  return 'source';
-}
-
-function optionLabel(item) {
-  if (item.id === 'reference') return 'Reference (original video)';
-  return `${item.label} (${item.effort})`;
-}
-
-function renderSelects() {
-  const items = state.runs;
-  const options = items.map((item) => `<option value="${item.id}">${optionLabel(item)}</option>`).join('');
-  elements.selectA.innerHTML = options;
-  elements.selectA.value = state.a;
-}
 
 function visibleRuns() {
   return state.runs;
@@ -101,16 +79,9 @@ function updatePanel(side) {
   const id = state[side];
   const item = itemById(id);
   const panel = document.querySelector(`.preview-panel[data-side="${side}"]`);
-  const chip = panel.querySelector('.provider-chip');
-  const title = panel.querySelector('.preview-identity strong');
-  const detail = panel.querySelector('.preview-identity small');
   const iframe = panel.querySelector('iframe');
   const nextUrl = itemUrl(item, previewCacheBust);
 
-  chip.textContent = item.id === 'reference' ? 'REFERENCE' : item.provider;
-  chip.className = `provider-chip ${providerClass(item.provider)}`;
-  title.textContent = item.id === 'reference' ? item.label : `${item.label} (${item.effort})`;
-  detail.textContent = item.id === 'reference' ? item.detail : item.runner;
   panel.classList.toggle('reference-preview', item.id === 'reference');
   panel.classList.toggle('waiting', !['ready', 'missing', 'error'].includes(item.state));
   panel.querySelector('.loading-card').lastChild.textContent = item.state === 'starting' ? 'Preview is starting' : 'Preparing preview';
@@ -134,7 +105,6 @@ function fitPreviews() {
 }
 
 function render() {
-  renderSelects();
   renderCatalog();
   elements.comparison.className = `comparison ${state.mode} fit`;
   elements.referenceToggle.textContent = state.mode === 'solo' ? 'Show reference' : 'Hide reference';
@@ -192,7 +162,6 @@ elements.referenceToggle.addEventListener('click', () => {
   persist();
   render();
 });
-elements.selectA.addEventListener('change', () => { state.a = elements.selectA.value; persist(); render(); });
 
 let browseIndex = 0;
 document.addEventListener('keydown', (event) => {
