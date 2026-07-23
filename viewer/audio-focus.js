@@ -5,6 +5,8 @@
   const focusMessage = 'beetbox:audio-focus';
   const suspendMessage = 'beetbox:audio-suspend';
   const focusId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   // Safari can leave a user-started AudioContext silent when it belongs to an
   // embedded document, even though the same page works at the top level. On
@@ -12,7 +14,7 @@
   // document instead. Do not install the muting shim in this mode: reliable
   // playback is more important than automatic focus on Apple WebKit.
   const isAppleWebKit = navigator.vendor === 'Apple Computer, Inc.' && /AppleWebKit/i.test(navigator.userAgent);
-  if (isAppleWebKit && window.top !== window) {
+  if (isAppleWebKit && !isIOS && window.top !== window) {
     try {
       if (window.top.location.origin === window.location.origin) {
         const TopAudioContext = window.top.AudioContext || window.top.webkitAudioContext;
@@ -34,6 +36,7 @@
 
   const contexts = new Set();
   const focusGains = new Map();
+  const unlockedContexts = new WeakSet();
 
   const audioNodePrototype = window.AudioNode?.prototype;
   const nativeConnect = audioNodePrototype?.connect;
@@ -72,17 +75,36 @@
   function claimAudioFocus() {
     for (const context of contexts) {
       if (!['running', 'closed'].includes(context.state)) context.resume().catch(() => {});
+      if (!unlockedContexts.has(context) && context.state !== 'closed') {
+        try {
+          const source = context.createBufferSource();
+          const gain = context.createGain();
+          gain.gain.value = 0;
+          source.buffer = context.createBuffer(1, 1, context.sampleRate);
+          source.connect(gain);
+          gain.connect(context.destination);
+          source.start(0);
+          unlockedContexts.add(context);
+        } catch {
+          // A later gesture will retry if the context is not ready yet.
+        }
+      }
       const gain = focusGains.get(context);
       if (gain) gain.gain.setTargetAtTime(1, context.currentTime, 0.005);
     }
     window.parent.postMessage({ type: focusMessage, focusId }, '*');
   }
 
-  window.addEventListener('pointerdown', claimAudioFocus, true);
-  window.addEventListener('pointerup', claimAudioFocus, true);
-  window.addEventListener('touchend', claimAudioFocus, true);
-  window.addEventListener('click', claimAudioFocus, true);
-  window.addEventListener('keydown', claimAudioFocus, true);
+  function claimAfterApplicationHandler() {
+    claimAudioFocus();
+    queueMicrotask(claimAudioFocus);
+  }
+
+  window.addEventListener('pointerdown', claimAfterApplicationHandler, true);
+  window.addEventListener('pointerup', claimAfterApplicationHandler, true);
+  window.addEventListener('touchend', claimAfterApplicationHandler, true);
+  window.addEventListener('click', claimAfterApplicationHandler, true);
+  window.addEventListener('keydown', claimAfterApplicationHandler, true);
   window.addEventListener('message', (event) => {
     if (event.source !== window.parent || event.data?.type !== suspendMessage) return;
     const isActive = event.data.focusId === focusId;

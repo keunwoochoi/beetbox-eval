@@ -194,6 +194,7 @@ function fitPreviews() {
     const iframe = viewport.querySelector('iframe');
     const item = itemById(iframe.dataset.item);
     const previewWidth = item.previewWidth || 1454;
+    const previewHeight = item.previewHeight || Math.round(previewWidth * (1622 / 1454));
     const widthScale = viewport.clientWidth / previewWidth;
     const compactLayout = window.matchMedia('(max-width: 820px)').matches;
     const visibleDepth = viewport.clientHeight / viewport.clientWidth;
@@ -214,12 +215,17 @@ function fitPreviews() {
     } catch {
       // Local multi-port previews are cross-origin; aspect-aware framing remains the fallback.
     }
-    if (compactLayout) scale = Math.max(scale, 0.44);
-    const previewHeight = viewport.clientHeight / scale;
+    if (compactLayout) {
+      scale = Math.min(widthScale, viewport.clientHeight / previewHeight);
+    }
+    const frameHeight = compactLayout ? previewHeight : viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
     iframe.style.width = `${previewWidth}px`;
-    iframe.style.height = `${previewHeight}px`;
+    iframe.style.height = `${frameHeight}px`;
     iframe.style.left = `${Math.max(0, (viewport.clientWidth - (previewWidth * scale)) / 2)}px`;
+    iframe.style.top = compactLayout
+      ? `${Math.max(0, (viewport.clientHeight - (previewHeight * scale)) / 2)}px`
+      : '0px';
   });
 }
 

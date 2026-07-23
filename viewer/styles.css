@@ -231,7 +231,7 @@ button { cursor: pointer; }
   .about-arena-button strong { font-size: 11px; }
   .workspace { grid-column: 1; grid-row: 3; min-height: 0; }
   .comparison, .preview-panel, .viewport { min-height: 0; }
-  .comparison.fit .canvas { overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  .comparison.fit .canvas { overflow: hidden; }
   .comparison.fit .canvas iframe { max-width: none; }
   .landing-header { width: min(100% - 32px, 1180px); padding: 22px 0; }
   .landing-header { gap: 8px; }
