@@ -140,7 +140,7 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(dashboardPort, host, () => {
-  console.log(`Beetbox Model Arena: http://localhost:${dashboardPort}/`);
+  console.log(`Beetbox Eval Arena: http://localhost:${dashboardPort}/`);
 });
 
 await Promise.all(runs.map(launchRun));
