@@ -59,10 +59,20 @@ function suspendPreview(iframe, focusId = null) {
   iframe.contentWindow?.postMessage({ type: 'beetbox:audio-suspend', focusId }, '*');
 }
 
+function pauseAllPreviews() {
+  document.querySelectorAll('.preview-panel iframe').forEach((iframe) => {
+    iframe.contentWindow?.postMessage({ type: 'beetbox:audio-pause' }, '*');
+  });
+}
+
 window.addEventListener('message', (event) => {
   if (event.data?.type !== 'beetbox:audio-focus' || typeof event.data.focusId !== 'string') return;
   const iframes = [...document.querySelectorAll('.preview-panel iframe')];
   for (const iframe of iframes) suspendPreview(iframe, event.data.focusId);
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') pauseAllPreviews();
 });
 
 function visibleRuns() {

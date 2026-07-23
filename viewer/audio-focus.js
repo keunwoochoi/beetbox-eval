@@ -65,6 +65,13 @@
     window.addEventListener('touchend', unlockAfterApplicationHandler, true);
     window.addEventListener('click', unlockAfterApplicationHandler, true);
     window.addEventListener('keydown', unlockAfterApplicationHandler, true);
+    window.addEventListener('message', (event) => {
+      if (event.source !== window.parent || event.data?.type !== 'beetbox:audio-pause') return;
+      for (const context of mobileContexts) {
+        if (context.state === 'running') context.suspend().catch(() => {});
+      }
+      for (const media of document.querySelectorAll('audio, video')) media.pause();
+    });
     return;
   }
 
@@ -166,7 +173,15 @@
   window.addEventListener('click', claimAfterApplicationHandler, true);
   window.addEventListener('keydown', claimAfterApplicationHandler, true);
   window.addEventListener('message', (event) => {
-    if (event.source !== window.parent || event.data?.type !== suspendMessage) return;
+    if (event.source !== window.parent) return;
+    if (event.data?.type === 'beetbox:audio-pause') {
+      for (const context of contexts) {
+        if (context.state === 'running') context.suspend().catch(() => {});
+      }
+      for (const media of document.querySelectorAll('audio, video')) media.pause();
+      return;
+    }
+    if (event.data?.type !== suspendMessage) return;
     const isActive = event.data.focusId === focusId;
     for (const context of contexts) {
       const gain = focusGains.get(context);
