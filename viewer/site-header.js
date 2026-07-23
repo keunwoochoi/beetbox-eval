@@ -12,7 +12,4 @@ document.querySelectorAll('[data-site-header]').forEach((header) => {
   if (header.hasAttribute('data-reference-toggle')) {
     header.insertAdjacentHTML('beforeend', '<button class="reference-toggle" id="reference-toggle" type="button" aria-pressed="false">Show reference</button>');
   }
-  if (header.hasAttribute('data-arena-link')) {
-    header.insertAdjacentHTML('beforeend', '<a class="header-arena-link" href="arena.html">Enter the arena <span aria-hidden="true">→</span></a>');
-  }
 });

@@ -11,7 +11,7 @@ const referenceDir = join(repoDir, 'prompt');
 
 const excludedDirectories = new Set(['.git', 'beetbox_frames', 'dist', 'node_modules']);
 const excludedFiles = new Set(['.DS_Store', '.gitignore', 'PROMPT.md', 'README.md', 'beetbox.mov', 'package-lock.json', 'package.json']);
-const viewerAssets = ['app.js', 'arena.html', 'audio-focus.js', 'index.html', 'reference.html', 'site-header.js', 'styles.css'];
+const viewerAssets = ['about.html', 'app.js', 'arena.html', 'audio-focus.js', 'index.html', 'reference.html', 'site-header.js', 'styles.css'];
 const audioFocusSource = await readFile(join(viewerDir, 'audio-focus.js'), 'utf8');
 
 function shouldCopyRunAsset(source, runRoot) {

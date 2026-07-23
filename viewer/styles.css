@@ -55,15 +55,14 @@ button { cursor: pointer; }
 .brand-mark i:nth-child(2), .brand-mark i:nth-child(4), .brand-mark i:nth-child(6), .brand-mark i:nth-child(8) { opacity: .32; }
 .reference-toggle { margin-left: auto; border: 1px solid var(--line); border-radius: 7px; background: #181a16; color: var(--muted); padding: 8px 11px; font-size: 10px; }
 .reference-toggle:hover, .reference-toggle.active { border-color: #51594a; color: var(--text); }
-.header-arena-link { display: flex; align-items: center; gap: 10px; margin-left: auto; border: 1px solid var(--acid); background: var(--acid); color: #10110f; padding: 9px 12px; font-size: 10px; font-weight: 750; letter-spacing: .03em; text-decoration: none; }
-.header-arena-link:hover span { transform: translateX(2px); }
-.header-arena-link span { transition: transform .15s ease; }
 
 .sidebar { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--line); background: #121410; }
 .catalog-header { display: grid; grid-template-columns: minmax(0, 1fr) 42px; align-items: end; gap: 8px; padding: 13px 18px 4px; color: var(--muted); }
 .catalog-header strong { grid-column: 2; text-align: center; font: 700 8px/1 ui-monospace, monospace; letter-spacing: .08em; }
 
 .catalog { flex: 1; min-height: 0; overflow: auto; padding: 9px; }
+.about-arena-link { margin: 0 9px 9px; border: 1px solid var(--line); border-radius: 7px; background: #181a16; color: var(--muted); padding: 11px 12px; font-size: 10px; text-align: center; text-decoration: none; }
+.about-arena-link:hover { border-color: #51594a; color: var(--text); }
 .run-card {
   position: relative;
   width: 100%;
@@ -155,7 +154,6 @@ button { cursor: pointer; }
   .topbar .brand-byline { display: none; }
   .landing-header .brand-byline { display: none; }
   .reference-toggle { padding: 7px 9px; }
-  .header-arena-link { padding: 8px 9px; }
   .brand { gap: 8px; }
   .brand-home { gap: 8px; }
   .brand-home strong { font-size: 10px; letter-spacing: .12em; }
