@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="dark" />
     <title>Beetbox Eval Arena</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=shared-header" />
+    <link rel="stylesheet" href="styles.css?v=audio-status" />
   </head>
   <body>
     <div class="app-shell">
@@ -18,15 +18,11 @@
 
       <main class="workspace">
         <section class="controls" aria-label="Comparison controls">
-          <div class="mode-switch" role="group" aria-label="View mode">
-            <button data-mode="solo" type="button">Solo</button>
-            <button class="active" data-mode="split" type="button">Split</button>
-          </div>
-          <label class="select-control"><span>A</span><select id="select-a" aria-label="Choose left preview"></select></label>
-          <label class="select-control second"><span>B</span><select id="select-b" aria-label="Choose right preview"></select></label>
+          <label class="select-control"><span>MODEL</span><select id="select-a" aria-label="Choose implementation"></select></label>
+          <div class="mode-switch"><button id="reference-toggle" type="button" aria-pressed="false">Show reference</button></div>
         </section>
 
-        <section class="comparison split" id="comparison">
+        <section class="comparison solo" id="comparison">
           <article class="preview-panel" data-side="a">
             <header class="preview-header">
               <div class="preview-identity"><span class="provider-chip">Source</span><div><strong>Reference video</strong><small>Original Beetbox capture</small></div></div>
@@ -45,6 +41,6 @@
     </div>
 
     <script type="module" src="site-header.js?v=shared-header"></script>
-    <script type="module" src="app.js?v=reference-panel"></script>
+    <script type="module" src="app.js?v=audio-status"></script>
   </body>
 </html>

@@ -14,7 +14,7 @@ const state = {
   runs: [],
   a: 'codex-sol-xhigh',
   b: 'reference',
-  mode: 'split'
+  mode: 'solo'
 };
 
 const previewCacheBust = Date.now();
@@ -23,7 +23,7 @@ const elements = {
   catalog: document.querySelector('#catalog'),
   comparison: document.querySelector('#comparison'),
   selectA: document.querySelector('#select-a'),
-  selectB: document.querySelector('#select-b')
+  referenceToggle: document.querySelector('#reference-toggle')
 };
 
 function itemById(id) {
@@ -74,16 +74,28 @@ function optionLabel(item) {
 }
 
 function renderSelects() {
-  const items = [REFERENCE, ...state.runs];
+  const items = state.runs;
   const options = items.map((item) => `<option value="${item.id}">${optionLabel(item)}</option>`).join('');
   elements.selectA.innerHTML = options;
-  elements.selectB.innerHTML = options;
   elements.selectA.value = state.a;
-  elements.selectB.value = state.b;
 }
 
 function visibleRuns() {
   return state.runs;
+}
+
+function evaluationBadges(run) {
+  const axes = {
+    audio: { pass: 'Audio works', warn: 'Audio weak', fail: 'No audio' },
+    pitch: { pass: 'Pitch correct', warn: 'Pitch partial', fail: 'Pitch wrong' },
+    controls: { pass: 'Controls work', warn: 'Controls partial', fail: 'Controls missing' },
+    ascii: { pass: 'ASCII strong', warn: 'ASCII basic', fail: 'ASCII missing' }
+  };
+  return Object.entries(run.evaluation || {}).map(([axis, rating]) => {
+    const label = axes[axis]?.[rating];
+    if (!label) return '';
+    return `<span class="evaluation-badge ${rating}" title="${label}"><i aria-hidden="true"></i>${label}</span>`;
+  }).join('');
 }
 
 function renderCatalog() {
@@ -91,7 +103,7 @@ function renderCatalog() {
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     const glyph = providerGlyph(run.provider);
-    return `<button class="run-card ${providerClass(run.provider)} ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small></span><span class="provider-glyph">${glyph}</span></button>`;
+    return `<button class="run-card ${providerClass(run.provider)} ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small><span class="evaluation-badges">${evaluationBadges(run)}</span></span><span class="provider-glyph">${glyph}</span></button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -143,22 +155,23 @@ function render() {
   renderSelects();
   renderCatalog();
   elements.comparison.className = `comparison ${state.mode} fit`;
-  elements.selectB.closest('.select-control').hidden = state.mode === 'solo';
+  elements.referenceToggle.textContent = state.mode === 'solo' ? 'Show reference' : 'Hide reference';
+  elements.referenceToggle.classList.toggle('active', state.mode === 'split');
+  elements.referenceToggle.setAttribute('aria-pressed', String(state.mode === 'split'));
   if (state.mode === 'solo') suspendPreview(document.querySelector('.preview-panel[data-side="b"] iframe'));
-  document.querySelectorAll('[data-mode]').forEach((button) => button.classList.toggle('active', button.dataset.mode === state.mode));
   updatePanel('a');
   updatePanel('b');
   requestAnimationFrame(fitPreviews);
 }
 
 function persist() {
-  const params = new URLSearchParams({ a: state.a, b: state.b, mode: state.mode });
+  const params = new URLSearchParams({ a: state.a, mode: state.mode });
   history.replaceState(null, '', `#${params}`);
 }
 
 function restore() {
   const params = new URLSearchParams(location.hash.slice(1));
-  for (const key of ['a', 'b', 'mode']) {
+  for (const key of ['a', 'mode']) {
     if (params.has(key)) state[key] = params.get(key);
   }
 }
@@ -172,7 +185,7 @@ async function fetchRuns(initial = false) {
     restore();
     const validIds = new Set(['reference', ...state.runs.map((run) => run.id)]);
     if (!validIds.has(state.a)) state.a = state.runs[0]?.id || 'reference';
-    if (!validIds.has(state.b)) state.b = 'reference';
+    state.b = 'reference';
     render();
     return;
   }
@@ -192,13 +205,12 @@ async function fetchRuns(initial = false) {
   }
 }
 
-document.querySelectorAll('[data-mode]').forEach((button) => button.addEventListener('click', () => {
-  state.mode = button.dataset.mode;
+elements.referenceToggle.addEventListener('click', () => {
+  state.mode = state.mode === 'solo' ? 'split' : 'solo';
   persist();
   render();
-}));
+});
 elements.selectA.addEventListener('change', () => { state.a = elements.selectA.value; persist(); render(); });
-elements.selectB.addEventListener('change', () => { state.b = elements.selectB.value; persist(); render(); });
 
 let browseIndex = 0;
 document.addEventListener('keydown', (event) => {
