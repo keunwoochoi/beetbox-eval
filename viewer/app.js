@@ -53,17 +53,19 @@ function visibleRuns() {
   return state.runs;
 }
 
-function audioScore(run) {
-  const rating = run.evaluation?.audio || 'unrated';
-  const labels = { pass: 'Audio: strong', warn: 'Audio: mediocre', fail: 'Audio: failed', unrated: 'Audio: not rated' };
-  return `<span class="audio-score ${rating}" role="img" aria-label="${labels[rating]}" title="${labels[rating]}"></span>`;
+function scoreDot(run, axis) {
+  const rating = run.evaluation?.[axis] || 'unrated';
+  const axisLabels = { audio: 'Audio', visual: 'Visual prompt analysis' };
+  const ratingLabels = { pass: 'strong', warn: 'partial', fail: 'failed', unrated: 'not rated' };
+  const label = `${axisLabels[axis]}: ${ratingLabels[rating]}`;
+  return `<span class="score-dot ${rating}" role="img" aria-label="${label}" title="${label}"></span>`;
 }
 
 function renderCatalog() {
   const runs = visibleRuns();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
-    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label} (${run.effort})</strong><small>${run.runner}</small></span>${audioScore(run)}</button>`;
+    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label} (${run.effort})</strong><small>${run.runner}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}</button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {

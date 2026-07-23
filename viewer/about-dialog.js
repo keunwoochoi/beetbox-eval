@@ -1,21 +1,18 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <title>About Beetbox Eval Arena</title>
-    <meta name="description" content="Interactive Beetbox reconstructions made by coding models from the same visual reference and short prompt." />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=arena-first" />
-  </head>
-  <body class="landing-page">
-    <header class="landing-header" data-site-header></header>
+const dialog = document.createElement('dialog');
+dialog.className = 'about-dialog';
+dialog.setAttribute('aria-labelledby', 'about-dialog-title');
+dialog.innerHTML = `
+  <div class="about-dialog-card">
+    <header class="about-dialog-header">
+      <div>
+        <span>ABOUT</span>
+        <h1 id="about-dialog-title">One-shot implementing Beetbox 🥁</h1>
+        <p>screen recording --&gt; [AI] --&gt; webapp?</p>
+      </div>
+      <button class="about-dialog-close" type="button" aria-label="Close About Beetbox Eval Arena">Close</button>
+    </header>
 
-    <main class="landing-main">
-      <h1>One-shot implementing Beetbox 🥁</h1>
-      <p class="landing-lede">screen recording --&gt; [AI] --&gt; webapp?</p>
-
+    <section class="about-dialog-content">
       <section class="landing-prompt" aria-labelledby="prompt-heading">
         <video controls playsinline preload="metadata" poster="reference/beetbox_frames/second_00.jpg" src="reference/beetbox.mov"></video>
         <div class="landing-prompt-copy">
@@ -23,6 +20,19 @@
           <p>Recreate the Beetbox web app shown in <code>beetbox.mov</code> and <code>beetbox_frames/</code> as faithfully as possible. Work autonomously and place the complete implementation in the current directory.</p>
         </div>
         <p class="prompt-note">The video comes from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>. I kept the text prompt minimal and also supplied one screenshot per second, so models without video input received a consistent visual reference while video-capable models could use the full clip.</p>
+
+        <section class="judging-notes" aria-labelledby="judging-heading">
+          <h2 id="judging-heading">How I judged the columns</h2>
+          <div>
+            <h3>Audio</h3>
+            <p>My rating considers both whether audio works and whether the instruments, balance, and musical behavior sound convincing. A functioning but poor-sounding result can still receive yellow.</p>
+          </div>
+          <div>
+            <h3>Visual prompt analysis</h3>
+            <p>This is my best judgment of whether the model read the visual details correctly. One useful check is the lead pad: <code>C+</code> and <code>A+</code> indicate notes an octave higher, but some models appear to have mistaken them for C-sharp and A-sharp.</p>
+          </div>
+          <p class="rating-key"><i class="pass"></i> strong <i class="warn"></i> partial <i class="fail"></i> failed</p>
+        </section>
 
         <section class="evaluation-notes" aria-labelledby="evaluation-heading">
           <h2 id="evaluation-heading">Suggested Evaluation Criteria</h2>
@@ -43,9 +53,24 @@
             <p>The ASCII visualization is subjective, so its complexity and character matter. I also listen for whether DARKROOM, GREASE, BACKSTREET, DAYLIGHT, and ACID produce convincing, distinct rhythms suggested by their names.</p>
           </div>
         </section>
-
       </section>
-    </main>
-    <script type="module" src="site-header.js?v=arena-first"></script>
-  </body>
-</html>
+    </section>
+  </div>`;
+
+document.body.append(dialog);
+
+let opener = null;
+
+document.querySelectorAll('[data-about-open]').forEach((button) => {
+  button.addEventListener('click', () => {
+    opener = button;
+    dialog.showModal();
+    dialog.querySelector('.about-dialog-close').focus();
+  });
+});
+
+dialog.querySelector('.about-dialog-close').addEventListener('click', () => dialog.close());
+dialog.addEventListener('click', (event) => {
+  if (event.target === dialog) dialog.close();
+});
+dialog.addEventListener('close', () => opener?.focus());
