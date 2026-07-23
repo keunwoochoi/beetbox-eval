@@ -58,7 +58,12 @@ button { cursor: pointer; }
 
 .sidebar { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--line); background: #121410; }
 .catalog-header { display: grid; grid-template-columns: minmax(0, 1fr) 42px 58px 44px 46px; align-items: end; gap: 5px; padding: 10px 18px 4px; color: var(--muted); }
-.catalog-header strong { text-align: center; font: 700 7px/1.12 ui-monospace, monospace; letter-spacing: .06em; }
+.catalog-sort { min-width: 0; border: 0; background: transparent; color: var(--muted); padding: 0; text-align: center; font: 700 7px/1.12 ui-monospace, monospace; letter-spacing: .06em; }
+.catalog-sort::after { content: "↕"; margin-left: 2px; opacity: .35; }
+.catalog-sort:hover { color: var(--text); }
+.catalog-sort.active { color: var(--acid); }
+.catalog-sort[data-direction="asc"]::after { content: "↑"; opacity: 1; }
+.catalog-sort[data-direction="desc"]::after { content: "↓"; opacity: 1; }
 
 .catalog { flex: 1; min-height: 0; overflow: auto; padding: 9px; }
 .about-arena-button { display: flex; flex-direction: column; gap: 4px; margin: 0 9px 9px; border: 1px solid #3e4632; border-radius: 9px; background: #1c2019; color: var(--text); padding: 12px 10px; text-align: left; }

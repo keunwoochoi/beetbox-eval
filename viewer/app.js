@@ -14,7 +14,9 @@ const state = {
   runs: [],
   a: 'codex-sol-xhigh',
   b: 'reference',
-  mode: 'solo'
+  mode: 'solo',
+  sortKey: null,
+  sortDirection: null
 };
 
 const previewCacheBust = Date.now();
@@ -50,7 +52,33 @@ window.addEventListener('message', (event) => {
 });
 
 function visibleRuns() {
-  return state.runs;
+  if (!state.sortKey) return state.runs;
+  const ratingValue = { pass: 2, warn: 1, fail: 0, unrated: -1 };
+  const indexed = state.runs.map((run, index) => ({ run, index }));
+  indexed.sort((left, right) => {
+    const leftValue = state.sortKey === 'price'
+      ? left.run.inputPrice
+      : ratingValue[left.run.evaluation?.[state.sortKey] || 'unrated'];
+    const rightValue = state.sortKey === 'price'
+      ? right.run.inputPrice
+      : ratingValue[right.run.evaluation?.[state.sortKey] || 'unrated'];
+    const difference = leftValue - rightValue;
+    if (difference === 0) return left.index - right.index;
+    return state.sortDirection === 'asc' ? difference : -difference;
+  });
+  return indexed.map(({ run }) => run);
+}
+
+function updateSortHeaders() {
+  document.querySelectorAll('[data-sort]').forEach((button) => {
+    const active = button.dataset.sort === state.sortKey;
+    button.classList.toggle('active', active);
+    button.dataset.direction = active ? state.sortDirection : '';
+    button.setAttribute('aria-pressed', String(active));
+    button.title = active
+      ? `Sorted ${state.sortDirection === 'asc' ? 'ascending' : 'descending'}; click to reverse`
+      : `Sort by ${button.textContent.trim().replace(/\s+/g, ' ')}`;
+  });
 }
 
 function scoreDot(run, axis) {
@@ -68,6 +96,7 @@ function priceTag(run) {
 
 function renderCatalog() {
   const runs = visibleRuns();
+  updateSortHeaders();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.effort}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}${scoreDot(run, 'music')}${priceTag(run)}</button>`;
@@ -81,6 +110,20 @@ function renderCatalog() {
     });
   });
 }
+
+document.querySelectorAll('[data-sort]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const key = button.dataset.sort;
+    if (state.sortKey === key) {
+      state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      state.sortKey = key;
+      state.sortDirection = key === 'price' ? 'asc' : 'desc';
+    }
+    browseIndex = 0;
+    renderCatalog();
+  });
+});
 
 function updatePanel(side) {
   const id = state[side];
