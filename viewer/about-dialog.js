@@ -13,7 +13,7 @@ dialog.innerHTML = `
 
     <section class="about-dialog-content">
       <section class="landing-prompt" aria-labelledby="prompt-heading">
-        <h1 class="prompt-section-title">The Prompt</h1>
+        <h1 class="about-section-title prompt-section-title">The Prompt</h1>
         <video controls playsinline preload="metadata" poster="reference/beetbox_frames/second_00.jpg" src="reference/beetbox.mov"></video>
         <div class="landing-prompt-copy">
           <h2 id="prompt-heading">Prompt</h2>
@@ -22,31 +22,45 @@ dialog.innerHTML = `
         <p class="prompt-note">The video comes from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>. I kept the text prompt minimal and also supplied one screenshot per second, so models without video input received a consistent visual reference while video-capable models could use the full clip.</p>
 
         <section class="runner-notes" aria-labelledby="runner-heading">
-          <h2 id="runner-heading">Runners</h2>
+          <h1 class="about-section-title" id="runner-heading">Runners</h1>
           <p><strong>GPT models</strong> Codex CLI</p>
           <p><strong>Claude models</strong> Claude Code</p>
           <p><strong>MiniMax, Qwen, and Kimi</strong> OpenCode</p>
         </section>
 
         <section class="judging-notes" aria-labelledby="judging-heading">
-          <h2 id="judging-heading">How I judged the columns</h2>
+          <h1 class="about-section-title" id="judging-heading">How I judged the columns</h1>
           <div>
             <h3>Audio</h3>
-            <p>My rating considers both whether audio works and whether the instruments, balance, and musical behavior sound convincing. A functioning but poor-sounding result can still receive yellow.</p>
+            <p class="judge-overview">Whether the audio works and sounds like a convincing musical product.</p>
+            <ul class="judge-ratings">
+              <li class="pass">Audio works and sounds convincing.</li>
+              <li class="warn">Audio works, but its instruments, balance, or behavior are weak.</li>
+              <li class="fail">Audio is absent or fundamentally broken.</li>
+            </ul>
           </div>
           <div>
             <h3>Visual prompt analysis</h3>
-            <p>This is my best judgment of whether the model read the visual details correctly. One useful check is the lead pad: <code>C+</code> and <code>A+</code> indicate notes an octave higher, but some models appear to have mistaken them for C-sharp and A-sharp.</p>
+            <p class="judge-overview">Whether the model correctly read the details shown in the video and screenshots.</p>
+            <ul class="judge-ratings">
+              <li class="pass">Key details are read correctly, including <code>C+</code> and <code>A+</code>.</li>
+              <li class="warn">The overall reconstruction is similar, but some details are missed or misread.</li>
+              <li class="fail">Major visual or prompt details are wrong.</li>
+            </ul>
           </div>
           <div>
             <h3>Music</h3>
-            <p>This rating focuses on whether the written notes are actually played at the correct pitches. Green means the notes are correct, yellow means the result is broadly similar but mistuned or inconsistently transcribed, and red means the musical result fails. Sound quality is judged separately under Audio.</p>
+            <p class="judge-overview">Whether the written notes are actually played at the correct pitches.</p>
+            <ul class="judge-ratings">
+              <li class="pass">All notes and tunings are correct.</li>
+              <li class="warn">The result is broadly similar, but mistuned or inconsistently transcribed.</li>
+              <li class="fail">The musical result fails.</li>
+            </ul>
           </div>
-          <p class="rating-key"><i class="pass"></i> strong <i class="warn"></i> partial <i class="fail"></i> failed</p>
         </section>
 
         <section class="evaluation-notes" aria-labelledby="evaluation-heading">
-          <h2 id="evaluation-heading">Other potential evaluation criteria</h2>
+          <h1 class="about-section-title" id="evaluation-heading">Other potential evaluation criteria</h1>
           <div class="evaluation-item">
             <h3>Does it work?</h3>
             <p>It should make sound, and the sequencer, tempo, swing, and volume controls should actually work.</p>
