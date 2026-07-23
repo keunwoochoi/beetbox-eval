@@ -53,17 +53,19 @@ button { cursor: pointer; }
 .brand-mark { display: grid; grid-template-columns: repeat(3, 5px); grid-template-rows: repeat(3, 5px); gap: 2px; transform: rotate(45deg); }
 .brand-mark i { display: block; background: var(--acid); }
 .brand-mark i:nth-child(2), .brand-mark i:nth-child(4), .brand-mark i:nth-child(6), .brand-mark i:nth-child(8) { opacity: .32; }
-.reference-toggle { margin-left: auto; border: 1px solid var(--line); border-radius: 7px; background: #181a16; color: var(--muted); padding: 8px 11px; font-size: 10px; }
+.reference-toggle { margin-left: 12px; border: 1px solid var(--line); border-radius: 7px; background: #181a16; color: var(--muted); padding: 8px 11px; font-size: 10px; }
 .reference-toggle:hover, .reference-toggle.active { border-color: #51594a; color: var(--text); }
 
 .sidebar { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-right: 1px solid var(--line); background: #121410; }
-.catalog-header { display: grid; grid-template-columns: minmax(0, 1fr) 42px 58px 44px 46px; align-items: end; gap: 5px; padding: 10px 18px 4px; color: var(--muted); }
-.catalog-sort { min-width: 0; border: 0; background: transparent; color: var(--muted); padding: 0; text-align: center; font: 700 7px/1.12 ui-monospace, monospace; letter-spacing: .06em; }
+.catalog-header { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(0, 1fr) 42px 58px 44px 46px; align-items: end; gap: 5px; padding: 10px 18px 4px; color: var(--muted); }
+.catalog-sort { position: relative; min-width: 0; border: 0; background: transparent; color: var(--muted); padding: 0; text-align: center; font: 700 9px/1.12 ui-monospace, monospace; letter-spacing: .03em; }
 .catalog-sort::after { content: "↕"; margin-left: 2px; opacity: .35; }
 .catalog-sort:hover { color: var(--text); }
 .catalog-sort.active { color: var(--acid); }
 .catalog-sort[data-direction="asc"]::after { content: "↑"; opacity: 1; }
 .catalog-sort[data-direction="desc"]::after { content: "↓"; opacity: 1; }
+.catalog-sort[data-tooltip]::before { position: absolute; top: calc(100% + 9px); left: 50%; width: 210px; transform: translateX(-50%) translateY(-2px); border: 1px solid #454b3f; border-radius: 7px; background: #20231d; color: var(--text); padding: 9px 10px; box-shadow: 0 10px 28px rgba(0, 0, 0, .42); content: attr(data-tooltip); font: 10px/1.45 Inter, ui-sans-serif, sans-serif; letter-spacing: 0; opacity: 0; pointer-events: none; text-align: left; transition: opacity .12s ease, transform .12s ease; }
+.catalog-sort[data-tooltip]:hover::before, .catalog-sort[data-tooltip]:focus-visible::before { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 .catalog { flex: 1; min-height: 0; overflow: auto; padding: 9px; }
 .about-arena-button { display: flex; flex-direction: column; gap: 4px; margin: 0 9px 9px; border: 1px solid #3e4632; border-radius: 9px; background: #1c2019; color: var(--text); padding: 12px 10px; text-align: left; }
