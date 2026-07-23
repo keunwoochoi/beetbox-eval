@@ -60,8 +60,8 @@ function providerClass(provider) {
 }
 
 function optionLabel(item) {
-  if (item.id === 'reference') return 'Reference · original video';
-  return `${item.label} · ${item.effort}`;
+  if (item.id === 'reference') return 'Reference (original video)';
+  return `${item.label} (${item.effort})`;
 }
 
 function renderSelects() {
@@ -85,7 +85,7 @@ function renderCatalog() {
   const runs = visibleRuns();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
-    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner} · ${run.effort}</small></span>${audioScore(run)}</button>`;
+    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.runner}, ${run.effort}</small></span>${audioScore(run)}</button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -110,7 +110,7 @@ function updatePanel(side) {
   chip.textContent = item.id === 'reference' ? 'REFERENCE' : item.provider;
   chip.className = `provider-chip ${providerClass(item.provider)}`;
   title.textContent = item.label;
-  detail.textContent = item.id === 'reference' ? item.detail : `${item.runner} · ${item.effort}`;
+  detail.textContent = item.id === 'reference' ? item.detail : `${item.runner}, ${item.effort}`;
   panel.classList.toggle('reference-preview', item.id === 'reference');
   panel.classList.toggle('waiting', !['ready', 'missing', 'error'].includes(item.state));
   panel.querySelector('.loading-card').lastChild.textContent = item.state === 'starting' ? 'Preview is starting' : 'Preparing preview';
