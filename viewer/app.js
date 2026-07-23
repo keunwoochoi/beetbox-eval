@@ -149,11 +149,25 @@ function fitPreviews() {
     const iframe = viewport.querySelector('iframe');
     const item = itemById(iframe.dataset.item);
     const previewWidth = item.previewWidth || 1454;
+    const widthScale = viewport.clientWidth / previewWidth;
     const visibleDepth = viewport.clientHeight / viewport.clientWidth;
     const preferredDepth = 0.96;
     const minimumFraming = 0.8;
     const framing = Math.min(1, Math.max(minimumFraming, visibleDepth / preferredDepth));
-    const scale = (viewport.clientWidth / previewWidth) * framing;
+    let scale = widthScale * framing;
+    try {
+      const documentHeight = Math.max(
+        iframe.contentDocument?.body?.scrollHeight || 0,
+        iframe.contentDocument?.documentElement?.scrollHeight || 0
+      );
+      const currentFrameHeight = Number.parseFloat(iframe.style.height) || 0;
+      if (currentFrameHeight && documentHeight > currentFrameHeight + 8) {
+        const contentScale = viewport.clientHeight / documentHeight;
+        scale = Math.max(widthScale * minimumFraming, Math.min(scale, contentScale));
+      }
+    } catch {
+      // Local multi-port previews are cross-origin; aspect-aware framing remains the fallback.
+    }
     const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
     iframe.style.width = `${previewWidth}px`;
@@ -236,6 +250,9 @@ document.addEventListener('keydown', (event) => {
 });
 
 new ResizeObserver(fitPreviews).observe(elements.comparison);
+document.querySelectorAll('.preview-panel iframe').forEach((iframe) => {
+  iframe.addEventListener('load', () => requestAnimationFrame(fitPreviews));
+});
 window.addEventListener('hashchange', () => { restore(); render(); });
 
 fetchRuns(true).catch((error) => {
