@@ -75,9 +75,10 @@ function updateSortHeaders() {
     button.classList.toggle('active', active);
     button.dataset.direction = active ? state.sortDirection : '';
     button.setAttribute('aria-pressed', String(active));
+    const columnName = button.querySelector('.sort-short')?.textContent || button.textContent;
     button.title = active
       ? `Sorted ${state.sortDirection === 'asc' ? 'ascending' : 'descending'}; click to reverse`
-      : `Sort by ${button.textContent.trim().replace(/\s+/g, ' ')}`;
+      : `Sort by ${columnName.trim()}`;
   });
 }
 
@@ -86,21 +87,25 @@ function scoreDot(run, axis) {
   const axisLabels = { audio: 'Audio', visual: 'Visual prompt analysis', music: 'Music' };
   const ratingLabels = { pass: 'strong', warn: 'partial', fail: 'failed', unrated: 'not rated' };
   const label = `${axisLabels[axis]}: ${ratingLabels[rating]}`;
-  return `<span class="score-dot ${rating}" role="img" aria-label="${label}" title="${label}"></span>`;
+  return `<span class="score-cell"><small>${axisLabels[axis]}</small><span class="score-dot ${rating}" role="img" aria-label="${label}" title="${label}"></span></span>`;
 }
 
 function priceTag(run) {
   const label = `$${run.inputPrice} per 1 million uncached input tokens`;
-  return `<span class="price-tag" aria-label="${label}" title="${label}">${run.inputPrice}</span>`;
+  return `<span class="price-cell"><small>$/M</small><span class="price-tag" aria-label="${label}" title="${label}">${run.inputPrice}</span></span>`;
 }
 
 function renderCatalog() {
   const runs = visibleRuns();
+  const scrollLeft = elements.catalog.scrollLeft;
+  const scrollTop = elements.catalog.scrollTop;
   updateSortHeaders();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.effort}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}${scoreDot(run, 'music')}${priceTag(run)}</button>`;
   }).join('');
+  elements.catalog.scrollLeft = scrollLeft;
+  elements.catalog.scrollTop = scrollTop;
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
       const id = button.dataset.run;
@@ -121,6 +126,8 @@ document.querySelectorAll('[data-sort]').forEach((button) => {
       state.sortDirection = key === 'price' ? 'asc' : 'desc';
     }
     browseIndex = 0;
+    elements.catalog.scrollLeft = 0;
+    elements.catalog.scrollTop = 0;
     renderCatalog();
   });
 });
@@ -150,6 +157,7 @@ function fitPreviews() {
     const item = itemById(iframe.dataset.item);
     const previewWidth = item.previewWidth || 1454;
     const widthScale = viewport.clientWidth / previewWidth;
+    const compactLayout = window.matchMedia('(max-width: 820px)').matches;
     const visibleDepth = viewport.clientHeight / viewport.clientWidth;
     const preferredDepth = 0.96;
     const minimumFraming = 0.8;
@@ -168,6 +176,7 @@ function fitPreviews() {
     } catch {
       // Local multi-port previews are cross-origin; aspect-aware framing remains the fallback.
     }
+    if (compactLayout) scale = Math.max(scale, 0.44);
     const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
     iframe.style.width = `${previewWidth}px`;
