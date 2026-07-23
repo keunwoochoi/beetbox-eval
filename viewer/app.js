@@ -113,10 +113,11 @@ function updatePanel(side) {
   const iframe = panel.querySelector('iframe');
   const nextUrl = itemUrl(item, previewCacheBust);
 
-  chip.textContent = item.provider;
+  chip.textContent = item.id === 'reference' ? 'REFERENCE' : item.provider;
   chip.className = `provider-chip ${providerClass(item.provider)}`;
   title.textContent = item.label;
   detail.textContent = item.id === 'reference' ? item.detail : `${item.runner} · ${item.effort}`;
+  panel.classList.toggle('reference-preview', item.id === 'reference');
   panel.classList.toggle('waiting', !['ready', 'missing', 'error'].includes(item.state));
   panel.querySelector('.loading-card').lastChild.textContent = item.state === 'starting' ? 'Preview is starting' : 'Preparing preview';
 
