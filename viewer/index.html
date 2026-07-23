@@ -48,7 +48,7 @@
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="styles.css?v=mobile-layout-5" />
+    <link rel="stylesheet" href="styles.css?v=mobile-picker-1" />
   </head>
   <body>
     <div class="app-shell">
@@ -57,8 +57,22 @@
       <aside class="sidebar">
         <div class="catalog-header"><span class="catalog-sort-caption">Sort</span><button class="catalog-sort" type="button" data-sort="audio" data-tooltip="Audio is rated by whether sound works and the instruments, balance, and behavior make a convincing musical product."><span class="sort-long">AUDIO</span><span class="sort-short">Audio</span></button><button class="catalog-sort" type="button" data-sort="visual" data-tooltip="Visual prompt analysis is rated by whether the model read key details correctly, especially C+ and A+ rather than C# and A#."><span class="sort-long">VISUAL<br />PROMPT<br />ANALYSIS</span><span class="sort-short">Visual</span></button><button class="catalog-sort" type="button" data-sort="music" data-tooltip="Music is rated by whether the written notes are actually played at the correct pitches and tuning."><span class="sort-long">MUSIC</span><span class="sort-short">Music</span></button><button class="catalog-sort" type="button" data-sort="price"><span class="sort-long">INPUT<br />$/M</span><span class="sort-short">$/M</span></button></div>
         <div class="catalog" id="catalog" aria-live="polite"></div>
-        <button class="about-arena-button" type="button" data-about-open><strong>What is this Beetbox Eval Arena???</strong></button>
       </aside>
+
+      <section class="mobile-picker" aria-label="Model selection">
+        <button class="mobile-model-trigger" id="mobile-model-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="mobile-model-dialog">
+          <span><small>Model</small><strong id="mobile-model-label">Choose a model</strong></span>
+          <span class="mobile-model-effort" id="mobile-model-effort"></span>
+          <span class="mobile-model-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <dialog class="mobile-model-dialog" id="mobile-model-dialog" aria-labelledby="mobile-model-dialog-title">
+          <header><strong id="mobile-model-dialog-title">Choose a model</strong><button type="button" data-mobile-model-close>Close</button></header>
+          <div data-mobile-sort-host></div>
+          <div class="mobile-catalog" id="mobile-catalog"></div>
+        </dialog>
+      </section>
+
+      <button class="about-arena-button" type="button" data-about-open><strong>What is this Beetbox Eval Arena???</strong></button>
 
       <main class="workspace">
         <section class="comparison solo" id="comparison">
@@ -73,7 +87,7 @@
     </div>
 
     <script type="module" src="site-header.js?v=reference-position"></script>
-    <script type="module" src="app.js?v=mobile-layout-3"></script>
+    <script type="module" src="app.js?v=mobile-picker-1"></script>
     <script type="module" src="about-dialog.js?v=arena-title"></script>
   </body>
 </html>

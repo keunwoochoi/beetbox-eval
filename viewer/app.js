@@ -20,9 +20,23 @@ const state = {
 };
 
 const previewCacheBust = Date.now();
+const compactMedia = window.matchMedia('(max-width: 820px)');
+
+const mobileSortHost = document.querySelector('[data-mobile-sort-host]');
+const desktopSortHeader = document.querySelector('.sidebar .catalog-header');
+if (mobileSortHost && desktopSortHeader) {
+  const mobileSortHeader = desktopSortHeader.cloneNode(true);
+  mobileSortHeader.classList.add('mobile-catalog-header');
+  mobileSortHost.replaceWith(mobileSortHeader);
+}
 
 const elements = {
   catalog: document.querySelector('#catalog'),
+  mobileCatalog: document.querySelector('#mobile-catalog'),
+  mobileTrigger: document.querySelector('#mobile-model-trigger'),
+  mobileDialog: document.querySelector('#mobile-model-dialog'),
+  mobileLabel: document.querySelector('#mobile-model-label'),
+  mobileEffort: document.querySelector('#mobile-model-effort'),
   comparison: document.querySelector('#comparison'),
   referenceToggle: document.querySelector('#reference-toggle')
 };
@@ -95,25 +109,32 @@ function priceTag(run) {
   return `<span class="price-cell"><small>$/M</small><span class="price-tag" aria-label="${label}" title="${label}">${run.inputPrice}</span></span>`;
 }
 
-function renderCatalog() {
+function renderCatalogInto(container) {
+  if (!container) return;
   const runs = visibleRuns();
-  const scrollLeft = elements.catalog.scrollLeft;
-  const scrollTop = elements.catalog.scrollTop;
-  updateSortHeaders();
-  elements.catalog.innerHTML = runs.map((run) => {
+  const scrollTop = container.scrollTop;
+  container.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
     return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.effort}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}${scoreDot(run, 'music')}${priceTag(run)}</button>`;
   }).join('');
-  elements.catalog.scrollLeft = scrollLeft;
-  elements.catalog.scrollTop = scrollTop;
-  elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
+  container.scrollTop = scrollTop;
+  container.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
-      const id = button.dataset.run;
-      state.a = id;
+      state.a = button.dataset.run;
+      if (container === elements.mobileCatalog) elements.mobileDialog?.close();
       persist();
       render();
     });
   });
+}
+
+function renderCatalog() {
+  updateSortHeaders();
+  renderCatalogInto(elements.catalog);
+  renderCatalogInto(elements.mobileCatalog);
+  const selected = itemById(state.a);
+  if (elements.mobileLabel) elements.mobileLabel.textContent = selected.label;
+  if (elements.mobileEffort) elements.mobileEffort.textContent = selected.effort;
 }
 
 document.querySelectorAll('[data-sort]').forEach((button) => {
@@ -126,10 +147,27 @@ document.querySelectorAll('[data-sort]').forEach((button) => {
       state.sortDirection = key === 'price' ? 'asc' : 'desc';
     }
     browseIndex = 0;
-    elements.catalog.scrollLeft = 0;
     elements.catalog.scrollTop = 0;
+    if (elements.mobileCatalog) elements.mobileCatalog.scrollTop = 0;
     renderCatalog();
   });
+});
+
+elements.mobileTrigger?.addEventListener('click', () => {
+  elements.mobileTrigger.setAttribute('aria-expanded', 'true');
+  elements.mobileDialog?.showModal();
+});
+document.querySelector('[data-mobile-model-close]')?.addEventListener('click', () => {
+  elements.mobileDialog?.close();
+});
+elements.mobileDialog?.addEventListener('click', (event) => {
+  if (event.target === elements.mobileDialog) elements.mobileDialog.close();
+});
+elements.mobileDialog?.addEventListener('toggle', () => {
+  elements.mobileTrigger?.setAttribute('aria-expanded', String(elements.mobileDialog.open));
+});
+elements.mobileDialog?.addEventListener('close', () => {
+  elements.mobileTrigger?.setAttribute('aria-expanded', 'false');
 });
 
 function updatePanel(side) {
@@ -186,6 +224,7 @@ function fitPreviews() {
 }
 
 function render() {
+  if (compactMedia.matches) state.mode = 'solo';
   renderCatalog();
   elements.comparison.className = `comparison ${state.mode} fit`;
   elements.referenceToggle.textContent = state.mode === 'solo' ? 'Show reference' : 'Hide reference';
@@ -198,7 +237,8 @@ function render() {
 }
 
 function persist() {
-  const params = new URLSearchParams({ a: state.a, mode: state.mode });
+  const values = compactMedia.matches ? { a: state.a } : { a: state.a, mode: state.mode };
+  const params = new URLSearchParams(values);
   history.replaceState(null, '', `#${params}`);
 }
 
@@ -207,6 +247,7 @@ function restore() {
   for (const key of ['a', 'mode']) {
     if (params.has(key)) state[key] = params.get(key);
   }
+  if (compactMedia.matches) state.mode = 'solo';
 }
 
 async function fetchRuns(initial = false) {
@@ -239,6 +280,7 @@ async function fetchRuns(initial = false) {
 }
 
 elements.referenceToggle.addEventListener('click', () => {
+  if (compactMedia.matches) return;
   state.mode = state.mode === 'solo' ? 'split' : 'solo';
   persist();
   render();
@@ -263,6 +305,14 @@ document.querySelectorAll('.preview-panel iframe').forEach((iframe) => {
   iframe.addEventListener('load', () => requestAnimationFrame(fitPreviews));
 });
 window.addEventListener('hashchange', () => { restore(); render(); });
+compactMedia.addEventListener('change', () => {
+  if (compactMedia.matches) {
+    state.mode = 'solo';
+    elements.mobileDialog?.close();
+  }
+  persist();
+  render();
+});
 
 fetchRuns(true).catch((error) => {
   console.error(error);
