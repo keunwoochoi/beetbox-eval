@@ -12,10 +12,9 @@ const REFERENCE = {
 
 const state = {
   runs: [],
-  a: 'reference',
-  b: 'codex-sol-xhigh',
-  mode: 'split',
-  scale: 'fit'
+  a: 'codex-sol-xhigh',
+  b: 'reference',
+  mode: 'split'
 };
 
 const previewCacheBust = Date.now();
@@ -97,8 +96,7 @@ function renderCatalog() {
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
       const id = button.dataset.run;
-      if (state.mode === 'solo') state.a = id;
-      else state.b = id;
+      state.a = id;
       persist();
       render();
     });
@@ -127,43 +125,39 @@ function updatePanel(side) {
     iframe.dataset.item = item.id;
     iframe.src = nextUrl;
   }
-  panel.querySelector('.reload').onclick = () => { iframe.src = itemUrl(item, Date.now()); };
-  panel.querySelector('.open').onclick = () => window.open(nextUrl, '_blank', 'noopener,noreferrer');
 }
 
 function fitPreviews() {
-  if (state.scale !== 'fit') return;
   document.querySelectorAll('.viewport').forEach((viewport) => {
-    const scale = Math.min(viewport.clientWidth / 1454, viewport.clientHeight / 1622);
-    const left = Math.max(0, (viewport.clientWidth - 1454 * scale) / 2);
-    const top = Math.max(0, (viewport.clientHeight - 1622 * scale) / 2);
+    if (!viewport.clientWidth || !viewport.clientHeight) return;
+    const scale = viewport.clientWidth / 1454;
+    const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
     const iframe = viewport.querySelector('iframe');
-    iframe.style.left = `${left}px`;
-    iframe.style.top = `${top}px`;
+    iframe.style.height = `${previewHeight}px`;
   });
 }
 
 function render() {
   renderSelects();
   renderCatalog();
-  elements.comparison.className = `comparison ${state.mode} ${state.scale}`;
+  elements.comparison.className = `comparison ${state.mode} fit`;
+  elements.selectB.closest('.select-control').hidden = state.mode === 'solo';
   if (state.mode === 'solo') suspendPreview(document.querySelector('.preview-panel[data-side="b"] iframe'));
   document.querySelectorAll('[data-mode]').forEach((button) => button.classList.toggle('active', button.dataset.mode === state.mode));
-  document.querySelectorAll('[data-scale]').forEach((button) => button.classList.toggle('active', button.dataset.scale === state.scale));
   updatePanel('a');
   updatePanel('b');
   requestAnimationFrame(fitPreviews);
 }
 
 function persist() {
-  const params = new URLSearchParams({ a: state.a, b: state.b, mode: state.mode, scale: state.scale });
+  const params = new URLSearchParams({ a: state.a, b: state.b, mode: state.mode });
   history.replaceState(null, '', `#${params}`);
 }
 
 function restore() {
   const params = new URLSearchParams(location.hash.slice(1));
-  for (const key of ['a', 'b', 'mode', 'scale']) {
+  for (const key of ['a', 'b', 'mode']) {
     if (params.has(key)) state[key] = params.get(key);
   }
 }
@@ -176,8 +170,8 @@ async function fetchRuns(initial = false) {
   if (initial) {
     restore();
     const validIds = new Set(['reference', ...state.runs.map((run) => run.id)]);
-    if (!validIds.has(state.a)) state.a = 'reference';
-    if (!validIds.has(state.b) || state.b === 'reference') state.b = state.runs[0]?.id || 'reference';
+    if (!validIds.has(state.a)) state.a = state.runs[0]?.id || 'reference';
+    if (!validIds.has(state.b)) state.b = 'reference';
     render();
     return;
   }
@@ -199,11 +193,6 @@ async function fetchRuns(initial = false) {
 
 document.querySelectorAll('[data-mode]').forEach((button) => button.addEventListener('click', () => {
   state.mode = button.dataset.mode;
-  persist();
-  render();
-}));
-document.querySelectorAll('[data-scale]').forEach((button) => button.addEventListener('click', () => {
-  state.scale = button.dataset.scale;
   persist();
   render();
 }));
