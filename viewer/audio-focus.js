@@ -7,6 +7,66 @@
   const focusId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`;
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isMobile = isIOS || /Android|Mobile/i.test(navigator.userAgent);
+
+  // There is only one preview on phones. Keep its audio graph completely
+  // untouched and instead resume every newly-created context immediately,
+  // while the tap that created it still owns browser user activation.
+  if (isMobile) {
+    const NativeAudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!NativeAudioContext) return;
+    const mobileContexts = new Set();
+    const unlockedContexts = new WeakSet();
+
+    function unlockContext(context) {
+      if (context.state === 'closed') return;
+      if (context.state !== 'running') context.resume().catch(() => {});
+      if (unlockedContexts.has(context)) return;
+      try {
+        const source = context.createBufferSource();
+        const gain = context.createGain();
+        gain.gain.value = 0;
+        source.buffer = context.createBuffer(1, 1, context.sampleRate);
+        source.connect(gain);
+        gain.connect(context.destination);
+        source.start(0);
+        unlockedContexts.add(context);
+      } catch {
+        // The next tap retries.
+      }
+    }
+
+    function MobileAudioContext(...args) {
+      const context = Reflect.construct(NativeAudioContext, args);
+      mobileContexts.add(context);
+      context.addEventListener?.('statechange', () => {
+        if (context.state === 'closed') mobileContexts.delete(context);
+      });
+      unlockContext(context);
+      return context;
+    }
+
+    MobileAudioContext.prototype = NativeAudioContext.prototype;
+    Object.setPrototypeOf(MobileAudioContext, NativeAudioContext);
+    window.AudioContext = MobileAudioContext;
+    window.webkitAudioContext = MobileAudioContext;
+
+    function unlockMobileAudio() {
+      for (const context of mobileContexts) unlockContext(context);
+    }
+
+    function unlockAfterApplicationHandler() {
+      unlockMobileAudio();
+      queueMicrotask(unlockMobileAudio);
+    }
+
+    window.addEventListener('pointerdown', unlockAfterApplicationHandler, true);
+    window.addEventListener('pointerup', unlockAfterApplicationHandler, true);
+    window.addEventListener('touchend', unlockAfterApplicationHandler, true);
+    window.addEventListener('click', unlockAfterApplicationHandler, true);
+    window.addEventListener('keydown', unlockAfterApplicationHandler, true);
+    return;
+  }
 
   // Safari can leave a user-started AudioContext silent when it belongs to an
   // embedded document, even though the same page works at the top level. On
