@@ -6,11 +6,11 @@
     <meta name="color-scheme" content="dark" />
     <title>Beetbox Eval Arena</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171915'/%3E%3Cpath d='M15 15h14v14H15zm20 0h14v14H35zM15 35h14v14H15zm20 0h14v14H35z' fill='%23d5ff52'/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="styles.css?v=clean-preview" />
+    <link rel="stylesheet" href="styles.css?v=topbar-reference" />
   </head>
   <body>
     <div class="app-shell">
-      <header class="topbar" data-site-header></header>
+      <header class="topbar" data-site-header data-reference-toggle></header>
 
       <aside class="sidebar">
         <div class="catalog-header" aria-hidden="true"><span></span><strong>AUDIO</strong></div>
@@ -18,10 +18,6 @@
       </aside>
 
       <main class="workspace">
-        <section class="controls" aria-label="Comparison controls">
-          <div class="mode-switch"><button id="reference-toggle" type="button" aria-pressed="false">Show reference</button></div>
-        </section>
-
         <section class="comparison solo" id="comparison">
           <article class="preview-panel" data-side="a">
             <div class="viewport"><div class="canvas"><iframe title="Preview A" loading="eager" allow="autoplay; fullscreen" allowfullscreen></iframe></div><div class="loading-card"><span></span>Preview is starting</div></div>
@@ -34,7 +30,7 @@
       </main>
     </div>
 
-    <script type="module" src="site-header.js?v=shared-header"></script>
-    <script type="module" src="app.js?v=clean-preview"></script>
+    <script type="module" src="site-header.js?v=topbar-reference"></script>
+    <script type="module" src="app.js?v=native-preview-widths"></script>
   </body>
 </html>

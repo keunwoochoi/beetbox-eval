@@ -9,4 +9,7 @@ const headerMarkup = `
 
 document.querySelectorAll('[data-site-header]').forEach((header) => {
   header.innerHTML = headerMarkup;
+  if (header.hasAttribute('data-reference-toggle')) {
+    header.insertAdjacentHTML('beforeend', '<button class="reference-toggle" id="reference-toggle" type="button" aria-pressed="false">Show reference</button>');
+  }
 });

@@ -96,10 +96,13 @@ function updatePanel(side) {
 function fitPreviews() {
   document.querySelectorAll('.viewport').forEach((viewport) => {
     if (!viewport.clientWidth || !viewport.clientHeight) return;
-    const scale = viewport.clientWidth / 1454;
+    const iframe = viewport.querySelector('iframe');
+    const item = itemById(iframe.dataset.item);
+    const previewWidth = item.previewWidth || 1454;
+    const scale = viewport.clientWidth / previewWidth;
     const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
-    const iframe = viewport.querySelector('iframe');
+    iframe.style.width = `${previewWidth}px`;
     iframe.style.height = `${previewHeight}px`;
   });
 }
