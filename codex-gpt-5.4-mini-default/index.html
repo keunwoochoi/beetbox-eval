@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beetbox</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <div class="app">
+        <header class="topbar">
+          <div class="brand">
+            <div class="brand-name">BEETBOX</div>
+            <div class="brand-tag">Beat sequencing · channel desk.</div>
+          </div>
+          <div class="window-controls" aria-hidden="true">
+            <div class="control-btn">↗</div>
+            <div class="control-btn">⋯</div>
+          </div>
+        </header>
+
+        <section class="transport">
+          <button class="play-btn" id="playBtn" aria-pressed="true">
+            <span class="play-icon">▶</span>
+            <span id="playLabel">PLAY</span>
+          </button>
+
+          <div class="slider-box">
+            <div class="slider-label">TEMPO</div>
+            <input id="tempo" class="slider" type="range" min="60" max="180" value="132" />
+            <div class="slider-value" id="tempoValue">132</div>
+          </div>
+
+          <div class="slider-box">
+            <div class="slider-label">SWING</div>
+            <input id="swing" class="slider" type="range" min="0" max="100" value="0" />
+            <div class="slider-value" id="swingValue">0%</div>
+          </div>
+
+          <div class="slider-box volume">
+            <div class="slider-label">VOLUME</div>
+            <input id="volume" class="slider" type="range" min="0" max="100" value="90" />
+            <div class="slider-value" id="volumeValue">90</div>
+          </div>
+
+          <div class="air-indicator"><span></span>ON AIR</div>
+        </section>
+
+        <section class="preset-row">
+          <button class="preset active"><span>▪</span> CH·10 DARKROOM</button>
+          <button class="preset">CH·20 GREASE</button>
+          <button class="preset">CH·30 BACKSTREET</button>
+          <button class="preset">CH·40 DAYLIGHT</button>
+          <button class="preset">CH·50 ACID</button>
+        </section>
+
+        <section class="utility-row">
+          <button class="small-btn">CLEAR</button>
+          <button class="small-btn">RANDOM</button>
+        </section>
+
+        <section class="glyph-panel">
+          <canvas id="glyphCanvas" width="1100" height="430"></canvas>
+        </section>
+
+        <section class="sequencer">
+          <div class="track-col">
+            <div class="track-hint">TRACK click = mute ↓</div>
+            <div id="trackList"></div>
+          </div>
+
+          <div class="grid-col">
+            <div class="step-number-row" id="stepNumbers"></div>
+            <div class="step-grid" id="stepGrid"></div>
+          </div>
+        </section>
+
+        <section class="mode-row">
+          <button class="small-btn">◼ LOOP REC</button>
+          <button class="mode-tab active">LEAD</button>
+          <button class="mode-tab">BASS</button>
+        </section>
+
+        <section class="note-row" id="noteRow"></section>
+
+        <section class="footer-copy">
+          <p><strong>Click cells</strong> to write beats · tap <strong>LEAD / BASS</strong> to cycle pitch (right-click lowers) · <strong>click a track name</strong> to mute</p>
+          <p><strong>Space</strong> play/stop</p>
+        </section>
+      </div>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+  </html>

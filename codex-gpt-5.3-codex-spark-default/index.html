@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beetbox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="beetbox" aria-label="Beetbox channel desk">
+      <section class="shell">
+        <header class="topbar">
+          <div class="title">Beat Sequencing - channel desk.</div>
+          <div class="blank-line"></div>
+          <div class="status"></div>
+        </header>
+
+        <section class="transport">
+          <div class="left">
+            <span class="play-indicator">&gt;</span>
+            <span class="btn">PLAY</span>
+          </div>
+          <div class="kv">
+            <span>TEMPO</span>
+            <span class="value" id="tempo">140</span>
+          </div>
+          <div class="kv">
+            <span>SWING</span>
+            <span class="value">8%</span>
+          </div>
+          <div class="kv wide">
+            <span>VOLUME</span>
+            <span class="value" id="volume">90</span>
+          </div>
+          <div class="status-indicator">
+            <span>ON</span>
+            <span>AIR</span>
+          </div>
+          <div class="fader"></div>
+        </section>
+
+        <section class="channels" id="top-channels" aria-label="Channel strip"></section>
+
+        <section class="toggle-row">
+          <span>CLEAR</span>
+          <span class="mdash">—</span>
+          <span>RANDOM</span>
+        </section>
+
+        <section class="step-grid" id="grid"></section>
+
+        <section class="mutebox" aria-label="Mute controls">
+          <span>TRACK</span>
+          <span>click = mute</span>
+          <span class="mute-number">3</span>
+          <span class="mute-number">2</span>
+          <span class="mute-number">3</span>
+          <span class="mute-number">4</span>
+          <span class="mute-number">5</span>
+          <span class="mute-number">6</span>
+          <span class="mute-number">7</span>
+          <span class="mute-number">8</span>
+          <span class="mute-number">9</span>
+          <span class="mute-number">10</span>
+          <span class="mute-number">11</span>
+          <span class="mute-number">12</span>
+          <span class="mute-number">13</span>
+          <span class="mute-number">14</span>
+          <span class="mute-number">15</span>
+          <span class="mute-number">16</span>
+        </section>
+
+        <section class="channel-help">
+          <span>LOOP REC</span>
+          <span>BASS</span>
+          <span class="spacer"></span>
+          <span>A</span><span class="note">c</span><span>D</span><span>E</span><span>G</span><span>A*</span><span>C=</span>
+          <span class="spacer"></span>
+          <span>Click cells to write beats</span>
+          <span>-</span><span>tap</span>
+          <span>LEAD / BASS to cycle pitch</span>
+          <span>(right-click lowers)</span>
+          <span>- click a track name to mute</span>
+          <span>Space play/stop</span>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      const topChannels = document.getElementById('top-channels');
+      const channelNames = ['DARKROOM', 'GREASE', 'BACKSTREET', 'DAYLIGHT', 'ACID'];
+      const channels = [
+        ['CH-1@', 'Lead'],
+        ['CH-2@', 'Bass'],
+        ['CH-3@', 'Kick'],
+        ['CH-4@', 'Snare'],
+        ['CH-5@', 'Clap'],
+        ['CH-6@', 'Hi-hat'],
+        ['CH-7@', 'Open hat'],
+        ['CH-8@', 'Rimshot'],
+        ['CH-9@', 'Tom'],
+        ['CH-10', 'Cowbell'],
+        ['CH-11', 'Shaker'],
+        ['CH-12', 'Crash'],
+      ];
+
+      const grid = document.getElementById('grid');
+      const steps = 16;
+      const stateSymbols = ['-', '/', '|', 'x', 'oo', '++', '##'];
+
+      const channelRows = channels.map((c, idx) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div class="row-label"><span class="idx">${String(idx + 1).padStart(2, '0')}</span><span class="id">${c[0]}</span><span class="name">${c[1]}</span></div>`;
+
+        const cells = document.createElement('div');
+        cells.className = 'cells';
+        for (let i = 0; i < steps; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.textContent = stateSymbols[(idx + i) % stateSymbols.length];
+          cell.dataset.channel = idx;
+          cell.dataset.step = i;
+          cells.appendChild(cell);
+        }
+        row.appendChild(cells);
+        grid.appendChild(row);
+        return row;
+      });
+
+      for (let i = 0; i < channelNames.length; i++) {
+        const chip = document.createElement('div');
+        chip.className = `channel-pill ${i === 0 ? 'active' : ''}`;
+        chip.innerHTML = `<span class="ch">CH-${i + 1}@</span><span class="name">${channelNames[i]}</span>`;
+        topChannels.appendChild(chip);
+      }
+
+      const cells = [...document.querySelectorAll('.cell')];
+      const pulseBars = [];
+      let step = 0;
+      let direction = 1;
+      let play = true;
+
+      function randomizeGrid() {
+        cells.forEach((cell) => {
+          const idx = parseInt(cell.dataset.channel, 10) + parseInt(cell.dataset.step, 10);
+          if (Math.random() > 0.75) cell.textContent = stateSymbols[Math.floor(Math.random() * stateSymbols.length)];
+          else if (Math.random() > 0.9) cell.textContent = Math.random() > 0.5 ? '  ' : '/';
+        });
+      }
+
+      function stepPulse() {
+        if (!play) return;
+        const activeColumn = 15 - (step % steps);
+        cells.forEach((c) => {
+          const s = Number(c.dataset.step);
+          c.classList.toggle('active-step', s === activeColumn);
+        });
+        const tempo = Number(document.getElementById('tempo').textContent);
+        step = (step + direction) % steps;
+        if (step === 0) randomizeGrid();
+        setTimeout(stepPulse, Math.max(90, 60000 / tempo / 4));
+      }
+
+      // emulate changing tempo and tempo random flicker from capture
+      let tempo = 140;
+      const tempoDisplay = document.getElementById('tempo');
+      setInterval(() => {
+        const drift = (Math.random() * 0.6) - 0.3;
+        tempo += drift;
+        tempo = Math.min(150, Math.max(132, Math.round(tempo * 10) / 10));
+        tempoDisplay.textContent = tempo % 1 === 0 ? tempo.toString() : tempo.toFixed(1);
+      }, 1200);
+
+      setInterval(() => {
+        const idx = Math.floor(Math.random() * cells.length);
+        const c = cells[idx];
+        const v = stateSymbols[Math.floor(Math.random() * stateSymbols.length)];
+        c.textContent = v;
+      }, 120);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          play = !play;
+          if (play) stepPulse();
+        }
+      });
+
+      randomizeGrid();
+      stepPulse();
+    </script>
+  </body>
+</html>

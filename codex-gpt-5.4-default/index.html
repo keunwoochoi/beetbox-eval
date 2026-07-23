@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beetbox</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <header class="topbar">
+          <div class="brand-wrap">
+            <h1 class="brand" aria-label="BEETBOX">BEETBOX</h1>
+            <p class="tagline">Beat sequencing · channel desk.</p>
+          </div>
+          <div class="window-actions" aria-hidden="true">
+            <button class="window-btn">↙</button>
+            <button class="window-btn">•••</button>
+          </div>
+        </header>
+
+        <section class="controls-row">
+          <button id="transport" class="transport-btn">▶ PLAY</button>
+          <label class="slider-card">
+            <span class="slider-label">TEMPO</span>
+            <input id="tempo" type="range" min="80" max="160" value="132" />
+            <span id="tempoValue" class="slider-value">132</span>
+          </label>
+          <label class="slider-card">
+            <span class="slider-label">SWING</span>
+            <input id="swing" type="range" min="0" max="24" value="0" />
+            <span id="swingValue" class="slider-value">0%</span>
+          </label>
+          <label class="slider-card">
+            <span class="slider-label">VOLUME</span>
+            <input id="volume" type="range" min="0" max="100" value="90" />
+            <span id="volumeValue" class="slider-value">90</span>
+          </label>
+          <div class="on-air"><span class="dot"></span> ON AIR</div>
+        </section>
+
+        <section id="channelButtons" class="channel-row"></section>
+        <section class="mini-controls">
+          <button id="clearBtn" class="small-btn">CLEAR</button>
+          <button id="randomBtn" class="small-btn active">RANDOM</button>
+        </section>
+
+        <pre id="ascii" class="ascii-board" aria-label="Animated visualization"></pre>
+
+        <section class="grid-wrap">
+          <div class="grid-headline">TRACK <span>click = mute ↕</span></div>
+          <div id="sequencer" class="sequencer"></div>
+        </section>
+
+        <section class="bottom-controls">
+          <button id="loopBtn" class="small-btn loop-btn">◼ LOOP REC</button>
+          <div class="voice-tabs">
+            <button id="leadTab" class="tab-btn active">LEAD</button>
+            <button id="bassTab" class="tab-btn">BASS</button>
+          </div>
+        </section>
+
+        <section id="noteRow" class="note-row"></section>
+
+        <section class="instructions">
+          <p>Click cells to write beats · tap LEAD / BASS to cycle pitch (right-click lowers) · click a track name to mute</p>
+          <p>Space play/stop</p>
+        </section>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
