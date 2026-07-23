@@ -28,6 +28,11 @@ dialog.innerHTML = `
           <p><strong>MiniMax, Qwen, and Kimi</strong> OpenCode</p>
         </section>
 
+        <section class="pricing-notes" aria-labelledby="pricing-heading">
+          <h1 class="about-section-title" id="pricing-heading">Pricing</h1>
+          <p><strong>INPUT $/M</strong> is the standard USD price for one million uncached input tokens. It excludes output tokens, caching discounts, promotions, subscriptions, and long-context surcharges. GPT-5.3 Codex Spark is shown at GPT-5.3 Codex's $1.75 input price because Spark's research-preview rate is not final.</p>
+        </section>
+
         <section class="judging-notes" aria-labelledby="judging-heading">
           <h1 class="about-section-title" id="judging-heading">How I judged the columns</h1>
           <div>

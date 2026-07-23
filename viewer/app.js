@@ -61,11 +61,16 @@ function scoreDot(run, axis) {
   return `<span class="score-dot ${rating}" role="img" aria-label="${label}" title="${label}"></span>`;
 }
 
+function priceTag(run) {
+  const label = `$${run.inputPrice} per 1 million uncached input tokens`;
+  return `<span class="price-tag" aria-label="${label}" title="${label}">${run.inputPrice}</span>`;
+}
+
 function renderCatalog() {
   const runs = visibleRuns();
   elements.catalog.innerHTML = runs.map((run) => {
     const selected = run.id === state.a || run.id === state.b;
-    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.effort}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}${scoreDot(run, 'music')}</button>`;
+    return `<button class="run-card ${selected ? 'selected' : ''}" data-run="${run.id}" type="button"><span class="run-copy"><strong>${run.label}</strong><small>${run.effort}</small></span>${scoreDot(run, 'audio')}${scoreDot(run, 'visual')}${scoreDot(run, 'music')}${priceTag(run)}</button>`;
   }).join('');
   elements.catalog.querySelectorAll('[data-run]').forEach((button) => {
     button.addEventListener('click', () => {
