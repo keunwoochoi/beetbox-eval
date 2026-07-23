@@ -5,7 +5,6 @@ dialog.innerHTML = `
   <div class="about-dialog-card">
     <header class="about-dialog-header">
       <div>
-        <span>ABOUT</span>
         <h1 id="about-dialog-title">One-shot implementing Beetbox 🥁</h1>
         <p>screen recording --&gt; [AI] --&gt; webapp?</p>
       </div>
@@ -31,11 +30,15 @@ dialog.innerHTML = `
             <h3>Visual prompt analysis</h3>
             <p>This is my best judgment of whether the model read the visual details correctly. One useful check is the lead pad: <code>C+</code> and <code>A+</code> indicate notes an octave higher, but some models appear to have mistaken them for C-sharp and A-sharp.</p>
           </div>
+          <div>
+            <h3>Music</h3>
+            <p>This rating focuses on whether the written notes are actually played at the correct pitches. Green means the notes are correct, yellow means the result is broadly similar but mistuned or inconsistently transcribed, and red means the musical result fails. Sound quality is judged separately under Audio.</p>
+          </div>
           <p class="rating-key"><i class="pass"></i> strong <i class="warn"></i> partial <i class="fail"></i> failed</p>
         </section>
 
         <section class="evaluation-notes" aria-labelledby="evaluation-heading">
-          <h2 id="evaluation-heading">Suggested Evaluation Criteria</h2>
+          <h2 id="evaluation-heading">Other potential evaluation criteria</h2>
           <div class="evaluation-item">
             <h3>Does it work?</h3>
             <p>It should make sound, and the sequencer, tempo, swing, and volume controls should actually work.</p>
