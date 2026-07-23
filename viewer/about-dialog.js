@@ -13,6 +13,7 @@ dialog.innerHTML = `
 
     <section class="about-dialog-content">
       <section class="landing-prompt" aria-labelledby="prompt-heading">
+        <h1 class="prompt-section-title">The Prompt</h1>
         <video controls playsinline preload="metadata" poster="reference/beetbox_frames/second_00.jpg" src="reference/beetbox.mov"></video>
         <div class="landing-prompt-copy">
           <h2 id="prompt-heading">Prompt</h2>
