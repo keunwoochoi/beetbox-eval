@@ -20,6 +20,13 @@ dialog.innerHTML = `
         </div>
         <p class="prompt-note">The video comes from <a href="https://www.kimi.com/blog/kimi-k3">Kimi K3's release post</a>. I kept the text prompt minimal and also supplied one screenshot per second, so models without video input received a consistent visual reference while video-capable models could use the full clip.</p>
 
+        <section class="runner-notes" aria-labelledby="runner-heading">
+          <h2 id="runner-heading">Runners</h2>
+          <p><strong>GPT models</strong> Codex CLI</p>
+          <p><strong>Claude models</strong> Claude Code</p>
+          <p><strong>MiniMax, Qwen, and Kimi</strong> OpenCode</p>
+        </section>
+
         <section class="judging-notes" aria-labelledby="judging-heading">
           <h2 id="judging-heading">How I judged the columns</h2>
           <div>

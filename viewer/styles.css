@@ -98,6 +98,10 @@ button { cursor: pointer; }
 .about-dialog-close:hover { border-color: #596050; color: var(--text); }
 .about-dialog-content { overflow: auto; padding: 28px 26px 44px; }
 .about-dialog .landing-prompt { width: min(720px, 100%); margin: 0 auto; }
+.runner-notes { width: 100%; margin-top: 42px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+.runner-notes h2 { margin: 0 0 14px; padding: 18px 0; border-bottom: 1px solid var(--line); color: var(--acid); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
+.runner-notes p { display: grid; grid-template-columns: minmax(150px, .8fr) 1fr; gap: 16px; margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.runner-notes strong { color: var(--text); font-weight: 600; }
 .judging-notes { width: 100%; margin-top: 42px; border-top: 1px solid var(--line); }
 .judging-notes > h2 { margin: 0; padding: 18px 0; border-bottom: 1px solid var(--line); color: var(--acid); font: 700 11px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
 .judging-notes > div { padding: 20px 0; border-bottom: 1px solid var(--line); }
