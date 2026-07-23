@@ -149,8 +149,10 @@ function fitPreviews() {
     const iframe = viewport.querySelector('iframe');
     const item = itemById(iframe.dataset.item);
     const previewWidth = item.previewWidth || 1454;
-    const wideViewport = viewport.clientWidth / viewport.clientHeight >= 1.1;
-    const framing = wideViewport ? 0.86 : 1;
+    const visibleDepth = viewport.clientHeight / viewport.clientWidth;
+    const preferredDepth = 0.96;
+    const minimumFraming = 0.8;
+    const framing = Math.min(1, Math.max(minimumFraming, visibleDepth / preferredDepth));
     const scale = (viewport.clientWidth / previewWidth) * framing;
     const previewHeight = viewport.clientHeight / scale;
     viewport.style.setProperty('--preview-scale', scale.toFixed(4));
