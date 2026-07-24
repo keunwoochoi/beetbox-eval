@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BEETBOX — Beat sequencing · channel desk.</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="app">
+
+  <header class="head">
+    <div class="logo" id="logo" aria-label="BEETBOX"></div>
+    <div class="tagline">Beat sequencing · channel desk.</div>
+  </header>
+
+  <div class="transport">
+    <button class="play" id="play" type="button"><span class="ico">&#9654;</span><span class="txt">PLAY</span></button>
+
+    <div class="knob" data-param="tempo">
+      <div class="knob-top"><span class="knob-label">TEMPO</span><span class="knob-val" id="tempo-val">132</span></div>
+      <input type="range" id="tempo" min="70" max="170" step="1" value="132" aria-label="Tempo">
+    </div>
+
+    <div class="knob" data-param="swing">
+      <div class="knob-top"><span class="knob-label">SWING</span><span class="knob-val" id="swing-val">0%</span></div>
+      <input type="range" id="swing" min="0" max="60" step="1" value="0" aria-label="Swing">
+    </div>
+
+    <div class="knob" data-param="volume">
+      <div class="knob-top"><span class="knob-label">VOLUME</span><span class="knob-val" id="volume-val">90</span></div>
+      <input type="range" id="volume" min="0" max="100" step="1" value="90" aria-label="Volume">
+    </div>
+
+    <div class="onair" id="onair"><i></i>ON AIR</div>
+  </div>
+
+  <div class="presets" id="presets"></div>
+
+  <div class="actions">
+    <button class="act" id="clear" type="button">CLEAR</button>
+    <button class="act" id="random" type="button">RANDOM</button>
+  </div>
+
+  <canvas class="field" id="field"></canvas>
+
+  <section class="seq">
+    <div class="seq-head">
+      <div class="seq-label">TRACK <span>click = mute &#8681;</span></div>
+      <div class="steps" id="step-head"></div>
+    </div>
+    <div id="rows"></div>
+  </section>
+
+  <div class="recbar">
+    <button class="rec" id="rec" type="button"><i></i>LOOP REC</button>
+    <div class="seg">
+      <button type="button" class="seg-btn on" data-target="lead">LEAD</button>
+      <button type="button" class="seg-btn" data-target="bass">BASS</button>
+    </div>
+  </div>
+
+  <div class="keys" id="keys"></div>
+
+  <p class="hint"><b>Click cells</b> to write beats &middot; <b>tap LEAD / BASS</b> to cycle pitch (right-click lowers) &middot; <b>click a track name</b> to mute</p>
+  <p class="hint"><b>Space</b> play/stop</p>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>

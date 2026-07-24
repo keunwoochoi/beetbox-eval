@@ -91,6 +91,9 @@ These are individual runs produced with different combinations of models, effort
 | GPT-5.4 Mini | default | Codex CLI | 0.75 |
 | GPT-5.3 Codex Spark | default | Codex CLI | 1.75 |
 | Claude Fable 5 | xhigh | Claude Code | 10 |
+| Claude Opus 5 | xhigh | Claude Code | 5 |
+| Claude Opus 5 | medium | Claude Code | 5 |
+| Claude Opus 5 | low | Claude Code | 5 |
 | Claude Opus 4.8 | xhigh | Claude Code | 5 |
 | Claude Sonnet 5 | high | Claude Code | 3 |
 | Claude Haiku 4.5 | default | Claude Code | 1 |

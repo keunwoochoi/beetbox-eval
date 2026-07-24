@@ -2,6 +2,7 @@
 .eval-failed/
 .eval-logs/
 _site/
+media/teaser-work/
 **/.vite/
 **/dist/
 **/node_modules/

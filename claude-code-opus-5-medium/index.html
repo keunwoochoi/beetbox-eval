@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BEETBOX · Beat sequencing · channel desk.</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <header class="head">
+    <div class="logo" id="logo" aria-label="BEETBOX"></div>
+    <div class="tagline">Beat sequencing &middot; channel desk.</div>
+  </header>
+
+  <section class="transport">
+    <button class="playbtn" id="playBtn" aria-label="play">
+      <span class="glyph" id="playGlyph"></span><span id="playLabel">PLAY</span>
+    </button>
+
+    <div class="knob" id="tempoKnob">
+      <div class="knob-top"><span class="knob-label">TEMPO</span><span class="knob-val" id="tempoVal">132</span></div>
+      <input type="range" id="tempo" min="60" max="180" step="1" value="132" />
+    </div>
+
+    <div class="knob" id="swingKnob">
+      <div class="knob-top"><span class="knob-label">SWING</span><span class="knob-val" id="swingVal">0%</span></div>
+      <input type="range" id="swing" min="0" max="60" step="1" value="0" />
+    </div>
+
+    <div class="knob" id="volKnob">
+      <div class="knob-top"><span class="knob-label">VOLUME</span><span class="knob-val" id="volVal">90</span></div>
+      <input type="range" id="volume" min="0" max="100" step="1" value="90" />
+    </div>
+
+    <div class="onair" id="onAir"><i></i>ON AIR</div>
+  </section>
+
+  <section class="presets" id="presets"></section>
+
+  <section class="utils">
+    <button class="util" id="clearBtn">CLEAR</button>
+    <button class="util" id="randomBtn">RANDOM</button>
+  </section>
+
+  <pre class="viz" id="viz" aria-hidden="true"></pre>
+
+  <section class="sequencer">
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="voicebar">
+    <button class="util loop" id="loopBtn"><i></i>LOOP REC</button>
+    <div class="voicetoggle">
+      <button class="voice on" data-voice="lead">LEAD</button>
+      <button class="voice" data-voice="bass">BASS</button>
+    </div>
+  </section>
+
+  <section class="keys" id="keys"></section>
+
+  <footer class="hints">
+    <p><b>Click cells</b> to write beats &middot; <b>tap LEAD / BASS</b> to cycle pitch (right&#8209;click lowers) &middot; <b>click a track name</b> to mute</p>
+    <p><b>Space</b> play/stop</p>
+  </footer>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
