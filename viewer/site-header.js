@@ -4,7 +4,7 @@ const headerMarkup = `
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
       <strong>BEETBOX EVAL ARENA</strong>
     </a>
-    <span class="brand-byline">by <a href="https://keunwoochoi.github.io/">Keunwoo Choi</a><span aria-hidden="true">|</span><a href="https://github.com/keunwoochoi/beetbox-eval">Source code</a></span>
+    <span class="brand-byline">by <a href="https://keunwoochoi.github.io/">Keunwoo Choi</a><span aria-hidden="true">|</span><a href="https://github.com/keunwoochoi/beetbox-eval">Source + tech report</a></span>
   </div>`;
 
 document.querySelectorAll('[data-site-header]').forEach((header) => {
