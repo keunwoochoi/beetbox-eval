@@ -1,4 +1,4 @@
-# Beetbox Model Arena
+# [Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/)
 
 Beetbox Model Arena is an independent experiment in visual-to-code reconstruction. It compares interactive web implementations produced by different coding models from the same short prompt and the same 19-second reference video.
 
