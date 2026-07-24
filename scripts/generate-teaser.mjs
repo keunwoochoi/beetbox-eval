@@ -10,7 +10,9 @@ const baseUrl = process.env.BEETBOX_BASE_URL || 'http://127.0.0.1:4800';
 const chromePath = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const barDuration = 60 / 132 * 4;
 const introDuration = 0.5;
+const outroDuration = 5;
 const arenaUrl = 'keunwoochoi.github.io/beetbox-eval';
+const reportUrl = 'https://github.com/keunwoochoi/beetbox-eval';
 
 const runs = [
   { folder: 'claude-code-fable-5-xhigh', label: 'Claude Fable 5 (xhigh)', selector: '#playBtn', width: 727, height: 811, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
@@ -196,6 +198,33 @@ async function captureRun(browser, runDefinition, index) {
   return { ...runDefinition, clipPath };
 }
 
+async function captureReport(browser) {
+  process.stdout.write('\nCapturing the technical report...\n');
+  const context = await browser.newContext({
+    viewport: { width: 1080, height: 7000 },
+    deviceScaleFactor: 1,
+    colorScheme: 'light'
+  });
+  const page = await context.newPage();
+  await page.goto(reportUrl, { waitUntil: 'networkidle', timeout: 60000 });
+  const heading = page.getByRole('heading', { name: 'Tech Report: Making Beetbox Eval Arena', exact: true });
+  await heading.waitFor({ state: 'visible' });
+  const box = await heading.boundingBox();
+  if (!box) throw new Error('Could not locate the technical report heading');
+  const reportPath = join(outputDir, 'technical-report.png');
+  await page.screenshot({
+    path: reportPath,
+    clip: {
+      x: 0,
+      y: Math.max(0, box.y - 80),
+      width: 1080,
+      height: 5100
+    }
+  });
+  await context.close();
+  return reportPath;
+}
+
 function drawTextFilter(text, y, size, color = 'white') {
   const escaped = text.replaceAll('\\', '\\\\').replaceAll(':', '\\:').replaceAll("'", "\\'");
   return `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='${escaped}':fontcolor=${color}:fontsize=${size}:x=(w-text_w)/2:y=${y}`;
@@ -213,7 +242,7 @@ function drawRatingsFilters(ratings) {
   ];
 }
 
-async function assemble(clips) {
+async function assemble(clips, reportPath) {
   await mkdir(resolve(finalPath, '..'), { recursive: true });
   const preparedPaths = [];
 
@@ -283,15 +312,51 @@ async function assemble(clips) {
     introPath
   ]);
 
+  const outroPath = join(outputDir, 'outro.mp4');
+  const outroFilter = [
+    `crop=1080:1920:0:'min(max((in_h-out_h)*t/${outroDuration},0),in_h-out_h)'`,
+    'hue=s=0',
+    'eq=brightness=-0.32:contrast=0.68',
+    'drawbox=x=0:y=570:w=1080:h=780:color=black@0.62:t=fill',
+    drawTextFilter('VISIT BEETBOX EVAL ARENA', 700, 54),
+    drawTextFilter('Play with every implementation.', 820, 38),
+    drawTextFilter('Read the technical report.', 878, 38),
+    drawTextFilter(arenaUrl, 1010, 34, '0xb8ff3d')
+  ].join(',');
+  await run('ffmpeg', [
+    '-y',
+    '-loop', '1',
+    '-framerate', '30',
+    '-i', reportPath,
+    '-f', 'lavfi',
+    '-i', 'anullsrc=channel_layout=stereo:sample_rate=48000',
+    '-vf', outroFilter,
+    '-t', String(outroDuration),
+    '-r', '30',
+    '-c:v', 'libx264',
+    '-preset', 'fast',
+    '-crf', '18',
+    '-pix_fmt', 'yuv420p',
+    '-c:a', 'aac',
+    '-b:a', '192k',
+    '-shortest',
+    outroPath
+  ]);
+
   const concatPath = join(outputDir, 'teaser.ffconcat');
-  const concatLines = ['ffconcat version 1.0', `file '${escapeConcatPath(introPath)}'`, ...preparedPaths.map((path) => `file '${escapeConcatPath(path)}'`)];
+  const concatLines = ['ffconcat version 1.0', `file '${escapeConcatPath(introPath)}'`, ...preparedPaths.map((path) => `file '${escapeConcatPath(path)}'`), `file '${escapeConcatPath(outroPath)}'`];
   await writeFile(concatPath, `${concatLines.join('\n')}\n`);
   const joinedPath = join(outputDir, 'joined.mp4');
   await run('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', concatPath, '-c', 'copy', joinedPath]);
   await run('ffmpeg', [
     '-y',
     '-i', joinedPath,
-    '-c', 'copy',
+    '-c:v', 'copy',
+    '-af', 'alimiter=limit=0.70:level=false',
+    '-c:a', 'aac',
+    '-b:a', '192k',
+    '-ar', '48000',
+    '-ac', '2',
     '-movflags', '+faststart',
     finalPath
   ]);
@@ -310,7 +375,8 @@ try {
     process.stdout.write(`\nCapturing ${runs[index].label}...\n`);
     clips.push(await captureRun(browser, runs[index], index));
   }
-  await assemble(clips);
+  const reportPath = await captureReport(browser);
+  await assemble(clips, reportPath);
 } finally {
   await browser.close();
 }
