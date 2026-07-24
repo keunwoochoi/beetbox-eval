@@ -1,12 +1,12 @@
-# [Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/)
+# Beetbox Model Arena
 
-Beetbox Model Arena is an independent experiment in visual-to-code reconstruction. It compares interactive web implementations produced by different coding models from the same short prompt and the same 19-second reference video.
+[Beetbox Model Arena](https://keunwoochoi.github.io/beetbox-eval/) is an independent experiment in visual-to-code reconstruction. It compares interactive web implementations produced by different coding models from the same short prompt and the same 19-second reference video.
 
 **This is an independent educational and research project. It is not affiliated with, endorsed by, or sponsored by Kimi or Moonshot AI.**
 
 ---
 
-# Making Beetbox Eval Arena
+# Tech Report: Making Beetbox Eval Arena
 
 @keunwoochoi, July 2026
 
