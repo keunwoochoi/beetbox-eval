@@ -10,18 +10,19 @@ const baseUrl = process.env.BEETBOX_BASE_URL || 'http://127.0.0.1:4800';
 const chromePath = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const barDuration = 60 / 132 * 4;
 const introDuration = 0.5;
+const arenaUrl = 'keunwoochoi.github.io/beetbox-eval';
 
 const runs = [
-  { folder: 'claude-code-fable-5-xhigh', label: 'Claude Fable 5 (xhigh)', selector: '#playBtn', width: 727, height: 811, gainDb: -2 },
-  { folder: 'claude-code-opus-5-xhigh', label: 'Claude Opus 5 (xhigh)', selector: '#play', width: 727, height: 816, gainDb: 0 },
-  { folder: 'claude-code-opus-5-medium', label: 'Claude Opus 5 (medium)', selector: '#playBtn', width: 1010, height: 1415, gainDb: 0 },
-  { folder: 'claude-code-opus-5-low', label: 'Claude Opus 5 (low)', selector: '#play', width: 1180, height: 1580, gainDb: 0 },
-  { folder: 'codex-gpt-5.6-sol-xhigh', label: 'GPT-5.6 Sol (xhigh)', selector: '#transportButton', width: 1454, height: 1622, gainDb: 9 },
-  { folder: 'opencode-kimi-k3', label: 'Kimi K3 (default)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -1 },
-  { folder: 'opencode-qwen3.7-plus', label: 'Qwen3.7 Plus (default)', selector: '#btnPlay', width: 1454, height: 1622, gainDb: -2 },
-  { folder: 'claude-code-opus-4.8-xhigh', label: 'Claude Opus 4.8 (xhigh)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -2 },
-  { folder: 'codex-gpt-5.6-luna-high', label: 'GPT-5.6 Luna (high)', selector: '#playButton', width: 1454, height: 1622, gainDb: 15 },
-  { folder: 'claude-code-sonnet-5-high', label: 'Claude Sonnet 5 (high)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -13 }
+  { folder: 'claude-code-fable-5-xhigh', label: 'Claude Fable 5 (xhigh)', selector: '#playBtn', width: 727, height: 811, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'claude-code-opus-5-xhigh', label: 'Claude Opus 5 (xhigh)', selector: '#play', width: 727, height: 816, gainDb: 0, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'claude-code-opus-5-medium', label: 'Claude Opus 5 (medium)', selector: '#playBtn', width: 1010, height: 1415, gainDb: 0, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'claude-code-opus-5-low', label: 'Claude Opus 5 (low)', selector: '#play', width: 1180, height: 1580, gainDb: 0, ratings: { audio: 'pass', visual: 'warn', music: 'pass' } },
+  { folder: 'codex-gpt-5.6-sol-xhigh', label: 'GPT-5.6 Sol (xhigh)', selector: '#transportButton', width: 1454, height: 1622, gainDb: 9, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'opencode-kimi-k3', label: 'Kimi K3 (default)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -1, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'opencode-qwen3.7-plus', label: 'Qwen3.7 Plus (default)', selector: '#btnPlay', width: 1454, height: 1622, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'claude-code-opus-4.8-xhigh', label: 'Claude Opus 4.8 (xhigh)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'warn' } },
+  { folder: 'codex-gpt-5.6-luna-high', label: 'GPT-5.6 Luna (high)', selector: '#playButton', width: 1454, height: 1622, gainDb: 15, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'claude-code-sonnet-5-high', label: 'Claude Sonnet 5 (high)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -13, ratings: { audio: 'warn', visual: 'pass', music: 'pass' } }
 ];
 
 const audioCaptureScript = () => {
@@ -195,9 +196,21 @@ async function captureRun(browser, runDefinition, index) {
   return { ...runDefinition, clipPath };
 }
 
-function drawTextFilter(text, y, size) {
+function drawTextFilter(text, y, size, color = 'white') {
   const escaped = text.replaceAll('\\', '\\\\').replaceAll(':', '\\:').replaceAll("'", "\\'");
-  return `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='${escaped}':fontcolor=white:fontsize=${size}:x=(w-text_w)/2:y=${y}`;
+  return `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='${escaped}':fontcolor=${color}:fontsize=${size}:x=(w-text_w)/2:y=${y}`;
+}
+
+function drawRatingsFilters(ratings) {
+  const colors = { pass: '0xb8ff3d', warn: '0xf2c94c', fail: '0xff5c5c' };
+  return [
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='AUDIO':fontcolor=0x8c9287:fontsize=24:x=(w/2)-278:y=326`,
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='●':fontcolor=${colors[ratings.audio]}:fontsize=34:x=(w/2)-188:y=317`,
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='VISUAL':fontcolor=0x8c9287:fontsize=24:x=(w/2)-72:y=326`,
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='●':fontcolor=${colors[ratings.visual]}:fontsize=34:x=(w/2)+33:y=317`,
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='MUSIC':fontcolor=0x8c9287:fontsize=24:x=(w/2)+148:y=326`,
+    `drawtext=fontfile=/System/Library/Fonts/Supplemental/Arial.ttf:text='●':fontcolor=${colors[ratings.music]}:fontsize=34:x=(w/2)+242:y=317`
+  ];
 }
 
 async function assemble(clips) {
@@ -209,7 +222,9 @@ async function assemble(clips) {
     const filter = [
       'scale=1040:-2',
       'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0x090b09',
-      drawTextFilter(clips[index].label, 270, 48)
+      drawTextFilter(clips[index].label, 238, 48),
+      ...drawRatingsFilters(clips[index].ratings),
+      drawTextFilter(arenaUrl, 'h-76', 26, '0x72786f')
     ].join(',');
     await run('ffmpeg', [
       '-y',
@@ -244,8 +259,10 @@ async function assemble(clips) {
   const introFilter = [
     'scale=1040:-2',
     'pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0x090b09',
-    'eq=brightness=-0.22',
-    drawTextFilter('LISTEN WITH SOUND', 280, 60)
+    'hue=s=0',
+    'eq=brightness=-0.34:contrast=0.72',
+    drawTextFilter('PLAY WITH SOUND', '(h-text_h)/2', 68),
+    drawTextFilter(arenaUrl, 'h-76', 26, '0x8a8f88')
   ].join(',');
   await run('ffmpeg', [
     '-y',
