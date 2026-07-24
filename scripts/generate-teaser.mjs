@@ -21,7 +21,7 @@ const runs = [
   { folder: 'claude-code-opus-5-low', label: 'Claude Opus 5 (low)', selector: '#play', width: 1180, height: 1580, gainDb: 0, ratings: { audio: 'pass', visual: 'warn', music: 'pass' } },
   { folder: 'codex-gpt-5.6-sol-xhigh', label: 'GPT-5.6 Sol (xhigh)', selector: '#transportButton', width: 1454, height: 1622, gainDb: 9, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
   { folder: 'opencode-kimi-k3', label: 'Kimi K3 (default)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -1, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
-  { folder: 'opencode-qwen3.7-plus', label: 'Qwen3.7 Plus (default)', selector: '#btnPlay', width: 1454, height: 1622, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
+  { folder: 'opencode-qwen3.7-plus', label: 'Qwen3.7 Plus (default)', selector: '#btnPlay', width: 1454, height: 1622, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'warn' } },
   { folder: 'claude-code-opus-4.8-xhigh', label: 'Claude Opus 4.8 (xhigh)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -2, ratings: { audio: 'pass', visual: 'pass', music: 'warn' } },
   { folder: 'codex-gpt-5.6-luna-high', label: 'GPT-5.6 Luna (high)', selector: '#playButton', width: 1454, height: 1622, gainDb: 15, ratings: { audio: 'pass', visual: 'pass', music: 'pass' } },
   { folder: 'claude-code-sonnet-5-high', label: 'Claude Sonnet 5 (high)', selector: '#playBtn', width: 1454, height: 1622, gainDb: -13, ratings: { audio: 'warn', visual: 'pass', music: 'pass' } }
